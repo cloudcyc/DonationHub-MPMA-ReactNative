@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-donationhub-dev-164648-authRole",
+      "UnauthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhub-dev-164648-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhub-dev-164648-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-donationhub-dev-164648-deployment",
+      "UnauthRoleName": "amplify-donationhub-dev-164648-unauthRole",
+      "StackName": "amplify-donationhub-dev-164648",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:439033634294:stack/amplify-donationhub-dev-164648/8efd4d10-d42b-11ec-b8ab-02b46caca392",
+      "AmplifyAppId": "d1tgftjyfyn26f"
+    }
+  }
+}
