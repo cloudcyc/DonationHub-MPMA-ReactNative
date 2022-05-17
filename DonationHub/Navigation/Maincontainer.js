@@ -29,6 +29,8 @@ function HomeTabs() {
     return (
       <Tab.Navigator
       screenOptions={({route}) => ({
+               tabBarInactiveTintColor: "grey",
+               tabBarActiveTintColor: "#FF9100",
                tabBarIcon: ({focused, color, size}) =>{
                    let iconName;
                    let rn = route.name;
@@ -44,12 +46,7 @@ function HomeTabs() {
                }
            })}
 
-            tabBarOptions={{
-                activeTintColor:'#FF9100',
-                inactiveTintColor:'grey',
-                labelStyle:{ fontSize:10},
-                style: {padding:10, height:70}
-            }}>
+            >
 
         <Tab.Screen name={HomeScreenName} component={HomeScreen} options={{headerShown: false,}}/>
         <Tab.Screen name={ProfileScreenName} component={ProfileScreen} options={{headerShown: false,}}/>
@@ -62,6 +59,8 @@ function HomeTabs() {
     return (
       <Tab.Navigator
       screenOptions={({route}) => ({
+               tabBarInactiveTintColor: "grey",
+               tabBarActiveTintColor: "#FF9100",
                tabBarIcon: ({focused, color, size}) =>{
                    let iconName;
                    let rn = route.name;
@@ -79,15 +78,10 @@ function HomeTabs() {
                }
            })}
 
-            tabBarOptions={{
-                activeTintColor:'#FF9100',
-                inactiveTintColor:'grey',
-                labelStyle:{ fontSize:10},
-                style: {padding:10, height:70}
-            }}>
+            >
 
         <Tab.Screen name={HomeScreenName} component={AdminHomeScreen} options={{headerShown: false,}}/>
-        <Tab.Screen name={RequestScreenName} component={RequestScreen} options={{headerShown: false,}} options={{headerShown: true}}/>
+        <Tab.Screen name={RequestScreenName} component={RequestScreen} options={{headerShown: true}}/>
         <Tab.Screen name={ProfileScreenName} component={AdminSettingScreen} options={{headerShown: false,}}/>
         
       </Tab.Navigator>
