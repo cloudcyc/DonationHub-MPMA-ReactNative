@@ -49,7 +49,6 @@ function AdminLocationDetails ({navigation}) {
 
                     </Text>
                 </View>
-                </ScrollView>
 
                 <View style={[styles.bottomView]}>
 
@@ -68,6 +67,9 @@ function AdminLocationDetails ({navigation}) {
                     </TouchableOpacity>
                 
                 </View>
+                </ScrollView>
+
+                
 
             </View>
 
