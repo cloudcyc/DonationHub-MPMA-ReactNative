@@ -11,6 +11,8 @@ import AddNewRequest from './screens/AddNewRequest';
 import AdminHomeScreen from './screens/adminscreens/AdminHomescreen';
 import AdminAddLocation from './screens/adminscreens/AdminAddLocation';
 import AdminSettingScreen from './screens/adminscreens/AdminSettingScreen';
+import AdminEditLocation from './screens/adminscreens/AdminEditLocation';
+import AdminLocationDetails from './screens/adminscreens/AdminLocationDetails';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -103,11 +105,9 @@ function HomeTabs() {
         <Stack.Screen name = 'RequestDetailScreen' component = {RequestDetailScreen} options={{title: '',headerTintColor:'black'}} />
         <Stack.Screen name = 'AddNewRequest' component = {AddNewRequest} options={{title: '',headerTintColor:'black'}} />
         <Stack.Screen name = 'Admin' component = {Admin} options={{headerShown: false,}} /> 
-        <Stack.Screen name = 'AdminAddLocation' component = {AdminAddLocation} options={{title: '',headerTintColor:'black'}} /> 
-
-
-
- 
+        <Stack.Screen name = 'AdminAddLocation' component = {AdminAddLocation} options={{title: '',headerTintColor:'black'}} />
+        <Stack.Screen name = 'AdminEditLocation' component = {AdminEditLocation} options={{title: '',headerTintColor:'black'}} /> 
+        <Stack.Screen name = 'AdminLocationDetails' component = {AdminLocationDetails} options={{title: '',headerTintColor:'black'}} />   
       </Stack.Navigator>
       
     );

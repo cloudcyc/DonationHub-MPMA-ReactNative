@@ -14,7 +14,7 @@ function AdminHomeScreen ({navigation}) {
                 </View>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('LocationDetails')}
+                    onPress={() => navigation.navigate('AdminLocationDetails')}
                     style={styles.roundButton}>
                     <Image style={styles.icon} source={{
                     uri:
@@ -28,7 +28,7 @@ function AdminHomeScreen ({navigation}) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('LocationDetails')}
+                    onPress={() => navigation.navigate('AdminLocationDetails')}
                     style={styles.roundButton}>
                     <Image style={styles.icon} source={{
                     uri:

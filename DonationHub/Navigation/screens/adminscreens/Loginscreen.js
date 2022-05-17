@@ -52,7 +52,7 @@ function LoginScreen ({navigation}) {
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('HomeTabs')}
+                    onPress={() => navigation.navigate('Admin')}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>

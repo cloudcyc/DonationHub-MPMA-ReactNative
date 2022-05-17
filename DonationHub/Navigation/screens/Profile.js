@@ -36,7 +36,7 @@ function ProfileScreen ({navigation}) {
 
           <View style={styles.bottomView}>
 
-              <TouchableOpacity style={styles.Signoutbutton} onPress={() => navigation.navigate('Admin')}>
+              <TouchableOpacity style={styles.Signoutbutton} onPress={() => navigation.navigate('LoginScreen')}>
                   <View style={styles.row}>
                       <Ionicons name='people-circle-outline' size={35} color='#FFF' />
                       <Text style={styles.SignoutText}>Are you an admin? Login Now</Text>
