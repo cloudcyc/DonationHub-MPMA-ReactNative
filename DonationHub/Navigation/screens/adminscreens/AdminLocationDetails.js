@@ -187,10 +187,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center', 
         alignItems: 'center',
-        position: 'absolute',
-        bottom: 0,
         width:'100%',
-        marginLeft:20
     },
 
 });

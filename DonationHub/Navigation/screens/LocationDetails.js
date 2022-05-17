@@ -50,7 +50,6 @@ function LocationDetails ({navigation}) {
                     </Text>
                 </View>
 
-                <View style={[styles.bottomView]}>
 
                     <TouchableOpacity
                         style={styles.loginScreenButton}
@@ -59,7 +58,6 @@ function LocationDetails ({navigation}) {
                         <Text style={styles.loginText}>View in Map</Text>
                     </TouchableOpacity>
                 
-                </View>
 
             </ScrollView>
 
@@ -183,7 +181,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width:'100%',
-        marginLeft:20
     },
 
 });
