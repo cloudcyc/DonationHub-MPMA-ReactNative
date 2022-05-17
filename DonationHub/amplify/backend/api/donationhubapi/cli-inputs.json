@@ -7,6 +7,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/users": {
+      "name": "/users",
+      "lambdaFunction": "donationhubusersapi",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "dynamodbDonationHub": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

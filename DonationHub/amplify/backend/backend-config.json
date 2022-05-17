@@ -21,6 +21,22 @@
           ]
         }
       ]
+    },
+    "donationhubusersapi": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "dynamodbDonationHub",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
     }
   },
   "api": {
@@ -31,6 +47,14 @@
         {
           "category": "function",
           "resourceName": "donationhubapi",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "donationhubusersapi",
           "attributes": [
             "Name",
             "Arn"
