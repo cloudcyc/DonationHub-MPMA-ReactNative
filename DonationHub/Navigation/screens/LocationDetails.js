@@ -48,11 +48,17 @@ function LocationDetails ({navigation}) {
                         Sunday	             10am–10pm{"\n"}
 
                     </Text>
+                    <TouchableOpacity
+                            style={styles.loginScreenButton}
+                            onPress={openPavilion}
+                            underlayColor='#fff'>
+                            <Text style={styles.loginText}>View in Map</Text>
+                    </TouchableOpacity>
                 </View>
 
                 </ScrollView>
 
-                    <View style={styles.bottomView}>
+                    {/* <View style={styles.bottomView}>
 
                         <TouchableOpacity
                             style={styles.loginScreenButton}
@@ -61,7 +67,7 @@ function LocationDetails ({navigation}) {
                             <Text style={styles.loginText}>View in Map</Text>
                         </TouchableOpacity>
                     
-                    </View>
+                    </View> */}
             </View>
 
             
