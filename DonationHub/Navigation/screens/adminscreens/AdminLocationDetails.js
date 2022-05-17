@@ -22,9 +22,9 @@ function AdminLocationDetails ({navigation}) {
                 />          
             </View>
 
-            <ScrollView style={[styles.container]}>
+            <View style={[styles.container]}>
 
-
+            <ScrollView>
                 <View style={styles.container2}>
                     <Text style={styles.title}>Address:</Text>
                     <Text style={styles.Desc}>168, Bukit Bintang St, Bukit Bintang, 55100 Kuala Lumpur, Federal Territory of Kuala Lumpur</Text>
@@ -49,6 +49,7 @@ function AdminLocationDetails ({navigation}) {
 
                     </Text>
                 </View>
+                </ScrollView>
 
                 <View style={[styles.bottomView]}>
 
@@ -68,7 +69,7 @@ function AdminLocationDetails ({navigation}) {
                 
                 </View>
 
-            </ScrollView>
+            </View>
 
             
             
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     },
 
     container:{
-        paddingTop:275,
+        paddingTop:265,
         paddingLeft:20,
         paddingRight:20,
         height:'100%',
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center',
         width:'100%',
+        bottom: 0,
     },
 
 });

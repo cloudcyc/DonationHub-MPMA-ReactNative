@@ -22,9 +22,9 @@ function LocationDetails ({navigation}) {
                 />          
             </View>
 
-            <ScrollView style={[styles.container]}>
+            <View style={[styles.container]}>
 
-
+            <ScrollView>
                 <View style={styles.container2}>
                     <Text style={styles.title}>Address:</Text>
                     <Text style={styles.Desc}>168, Bukit Bintang St, Bukit Bintang, 55100 Kuala Lumpur, Federal Territory of Kuala Lumpur</Text>
@@ -50,16 +50,19 @@ function LocationDetails ({navigation}) {
                     </Text>
                 </View>
 
+                </ScrollView>
 
-                    <TouchableOpacity
-                        style={styles.loginScreenButton}
-                        onPress={openPavilion}
-                        underlayColor='#fff'>
-                        <Text style={styles.loginText}>View in Map</Text>
-                    </TouchableOpacity>
-                
+                    <View style={styles.bottomView}>
 
-            </ScrollView>
+                        <TouchableOpacity
+                            style={styles.loginScreenButton}
+                            onPress={openPavilion}
+                            underlayColor='#fff'>
+                            <Text style={styles.loginText}>View in Map</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+            </View>
 
             
             
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     },
 
     container:{
-        paddingTop:275,
+        paddingTop:265,
         paddingLeft:20,
         paddingRight:20,
         height:'100%',
@@ -151,7 +154,8 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
         width:'100%',
         height:45,
-        marginBottom:50
+        marginBottom:50,
+
     },
 
     loginScreenButton2:{
@@ -181,6 +185,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width:'100%',
+        marginLeft:20,
     },
 
 });
