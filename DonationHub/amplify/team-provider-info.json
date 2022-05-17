@@ -1,15 +1,39 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-donationhubdb-prod-00014-authRole",
+      "UnauthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhubdb-prod-00014-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhubdb-prod-00014-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-donationhubdb-prod-00014-deployment",
+      "UnauthRoleName": "amplify-donationhubdb-prod-00014-unauthRole",
+      "StackName": "amplify-donationhubdb-prod-00014",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:439033634294:stack/amplify-donationhubdb-prod-00014/47681500-d531-11ec-b650-02cdf52787f8",
+      "AmplifyAppId": "d3386612r2lbeu"
+    }
+  },
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-donationhub-dev-164648-authRole",
-      "UnauthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhub-dev-164648-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhub-dev-164648-authRole",
+      "AuthRoleName": "amplify-donationhubdb-dev-00219-authRole",
+      "UnauthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhubdb-dev-00219-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::439033634294:role/amplify-donationhubdb-dev-00219-authRole",
       "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-donationhub-dev-164648-deployment",
-      "UnauthRoleName": "amplify-donationhub-dev-164648-unauthRole",
-      "StackName": "amplify-donationhub-dev-164648",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:439033634294:stack/amplify-donationhub-dev-164648/8efd4d10-d42b-11ec-b8ab-02b46caca392",
-      "AmplifyAppId": "d1tgftjyfyn26f"
+      "DeploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
+      "UnauthRoleName": "amplify-donationhubdb-dev-00219-unauthRole",
+      "StackName": "amplify-donationhubdb-dev-00219",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:439033634294:stack/amplify-donationhubdb-dev-00219/91601630-d531-11ec-bc3c-0a5e031cf822",
+      "AmplifyAppId": "d3386612r2lbeu"
+    },
+    "categories": {
+      "auth": {
+        "undefined": {}
+      },
+      "function": {
+        "donationhubapi": {
+          "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
+          "s3Key": "amplify-builds/donationhubapi-2f584a636266796d7079-build.zip"
+        }
+      }
     }
   }
 }

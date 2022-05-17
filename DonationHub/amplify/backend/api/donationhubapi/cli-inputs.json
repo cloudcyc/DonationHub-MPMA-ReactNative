@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/centres": {
+      "name": "/centres",
+      "lambdaFunction": "donationhubapi",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

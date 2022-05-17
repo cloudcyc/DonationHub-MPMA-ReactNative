@@ -1,0 +1,10 @@
+{
+  "resourceName": "dynamodbDonationHub",
+  "tableName": "centres",
+  "partitionKey": {
+    "fieldName": "centreID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
