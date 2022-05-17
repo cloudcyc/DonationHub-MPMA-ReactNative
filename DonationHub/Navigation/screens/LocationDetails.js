@@ -22,7 +22,7 @@ function LocationDetails ({navigation}) {
                 />          
             </View>
 
-            <View style={[styles.container]}>
+            <ScrollView style={[styles.container]}>
 
 
                 <View style={styles.container2}>
@@ -61,7 +61,7 @@ function LocationDetails ({navigation}) {
                 
                 </View>
 
-            </View>
+            </ScrollView>
 
             
             
