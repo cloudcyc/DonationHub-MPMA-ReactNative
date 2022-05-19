@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.DynamoDBv2;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -42,10 +44,26 @@ namespace donationhubapi
 
             switch (request.HttpMethod) {
                 case "GET":
-                    context.Logger.LogLine($"Get Request: {request.Path}\n");
-                    response.StatusCode = (int)HttpStatusCode.OK;
-                    response.Body = "{ \"message\": \"Hello AWS Serverless\" }";
-                    response.Headers["Content-Type"] = "application/json";
+                    // string selectedCentreID = "";
+                    if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("selectedCentreID"))
+                    {
+                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        var centres = await centreProvider.GetSelectedCentresAsync(request.QueryStringParameters["selectedCentreID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(centres)
+                        };
+                    }else if (request.QueryStringParameters == null){
+                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        var centres = await centreProvider.GetAllCentresAsync();
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(centres)
+                        };
+                    }
+                    
                     break;
                 case "POST":
                     context.Logger.LogLine($"Post Request: {request.Path}\n");

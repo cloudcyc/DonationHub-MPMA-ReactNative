@@ -31,11 +31,11 @@
       "function": {
         "donationhubapi": {
           "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
-          "s3Key": "amplify-builds/donationhubapi-2f584a636266796d7079-build.zip"
+          "s3Key": "amplify-builds/donationhubapi-343471675651644a4d4a-build.zip"
         },
         "donationhubusersapi": {
           "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
-          "s3Key": "amplify-builds/donationhubusersapi-625a4f33306a572b6f43-build.zip"
+          "s3Key": "amplify-builds/donationhubusersapi-6e726264644968596139-build.zip"
         }
       }
     }
