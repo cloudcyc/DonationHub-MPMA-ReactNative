@@ -1,7 +1,7 @@
 {
   "permissions": {
     "storage": {
-      "dynamodbDonationHub": [
+      "donationhubCentre": [
         "create",
         "read",
         "update",

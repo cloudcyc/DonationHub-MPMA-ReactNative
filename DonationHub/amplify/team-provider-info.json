@@ -29,13 +29,9 @@
         "undefined": {}
       },
       "function": {
-        "donationhubapi": {
+        "donationhubCentres": {
           "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
-          "s3Key": "amplify-builds/donationhubapi-343471675651644a4d4a-build.zip"
-        },
-        "donationhubusersapi": {
-          "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
-          "s3Key": "amplify-builds/donationhubusersapi-6e726264644968596139-build.zip"
+          "s3Key": "amplify-builds/donationhubCentres-37364c45704c5a66616c-build.zip"
         }
       }
     }

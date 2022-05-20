@@ -2,5 +2,5 @@
   "pluginId": "amplify-dotnet-function-runtime-provider",
   "functionRuntime": "dotnetcore3.1",
   "useLegacyBuild": false,
-  "defaultEditorFile": "src\\donationhubusersapi.cs"
+  "defaultEditorFile": "src\\donationhubCentres.cs"
 }

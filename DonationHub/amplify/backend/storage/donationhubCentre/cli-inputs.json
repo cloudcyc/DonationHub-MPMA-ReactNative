@@ -1,7 +1,11 @@
 {
-  "resourceName": "dynamodbDonationHub",
+  "resourceName": "donationhubCentre",
   "tableName": "centres",
   "partitionKey": {
+    "fieldName": "centreStatus",
+    "fieldType": "string"
+  },
+  "sortKey": {
     "fieldName": "centreID",
     "fieldType": "string"
   },

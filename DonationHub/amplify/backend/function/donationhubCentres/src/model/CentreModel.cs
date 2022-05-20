@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace donationhubapi
+namespace donationhubCentres
 { 
         public class CentreModel
         {

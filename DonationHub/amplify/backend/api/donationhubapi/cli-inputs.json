@@ -3,14 +3,7 @@
   "paths": {
     "/centres": {
       "name": "/centres",
-      "lambdaFunction": "donationhubapi",
-      "permissions": {
-        "setting": "open"
-      }
-    },
-    "/users": {
-      "name": "/users",
-      "lambdaFunction": "donationhubusersapi",
+      "lambdaFunction": "donationhubCentres",
       "permissions": {
         "setting": "open"
       }

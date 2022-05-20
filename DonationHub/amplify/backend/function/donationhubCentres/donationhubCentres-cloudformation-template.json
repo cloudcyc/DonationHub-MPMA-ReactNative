@@ -16,17 +16,17 @@
     "s3Key": {
       "Type": "String"
     },
-    "storagedynamodbDonationHubName": {
+    "storagedonationhubCentreName": {
       "Type": "String",
-      "Default": "storagedynamodbDonationHubName"
+      "Default": "storagedonationhubCentreName"
     },
-    "storagedynamodbDonationHubArn": {
+    "storagedonationhubCentreArn": {
       "Type": "String",
-      "Default": "storagedynamodbDonationHubArn"
+      "Default": "storagedonationhubCentreArn"
     },
-    "storagedynamodbDonationHubStreamArn": {
+    "storagedonationhubCentreStreamArn": {
       "Type": "String",
-      "Default": "storagedynamodbDonationHubStreamArn"
+      "Default": "storagedonationhubCentreStreamArn"
     }
   },
   "Conditions": {
@@ -55,16 +55,16 @@
             "Ref": "s3Key"
           }
         },
-        "Handler": "donationhubapi::donationhubapi.donationhubapi::LambdaHandler",
+        "Handler": "donationhubCentres::donationhubCentres.donationhubCentres::LambdaHandler",
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "donationhubapi",
+            "donationhubCentres",
             {
               "Fn::Join": [
                 "",
                 [
-                  "donationhubapi",
+                  "donationhubCentres",
                   "-",
                   {
                     "Ref": "env"
@@ -82,14 +82,14 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "STORAGE_DYNAMODBDONATIONHUB_NAME": {
-              "Ref": "storagedynamodbDonationHubName"
+            "STORAGE_DONATIONHUBCENTRE_NAME": {
+              "Ref": "storagedonationhubCentreName"
             },
-            "STORAGE_DYNAMODBDONATIONHUB_ARN": {
-              "Ref": "storagedynamodbDonationHubArn"
+            "STORAGE_DONATIONHUBCENTRE_ARN": {
+              "Ref": "storagedonationhubCentreArn"
             },
-            "STORAGE_DYNAMODBDONATIONHUB_STREAMARN": {
-              "Ref": "storagedynamodbDonationHubStreamArn"
+            "STORAGE_DONATIONHUBCENTRE_STREAMARN": {
+              "Ref": "storagedonationhubCentreStreamArn"
             }
           }
         },
@@ -110,12 +110,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "donationhubdbLambdaRoleff076f38",
+            "donationhubdbLambdaRole05bec3b1",
             {
               "Fn::Join": [
                 "",
                 [
-                  "donationhubdbLambdaRoleff076f38",
+                  "donationhubdbLambdaRole05bec3b1",
                   "-",
                   {
                     "Ref": "env"
@@ -219,14 +219,14 @@
               ],
               "Resource": [
                 {
-                  "Ref": "storagedynamodbDonationHubArn"
+                  "Ref": "storagedonationhubCentreArn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storagedynamodbDonationHubArn"
+                        "Ref": "storagedonationhubCentreArn"
                       },
                       "index/*"
                     ]

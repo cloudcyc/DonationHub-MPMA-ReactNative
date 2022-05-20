@@ -1,35 +1,19 @@
 {
   "storage": {
-    "dynamodbDonationHub": {
+    "donationhubCentre": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }
   },
   "function": {
-    "donationhubapi": {
+    "donationhubCentres": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": [
         {
           "category": "storage",
-          "resourceName": "dynamodbDonationHub",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
-        }
-      ]
-    },
-    "donationhubusersapi": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "dynamodbDonationHub",
+          "resourceName": "donationhubCentre",
           "attributes": [
             "Name",
             "Arn",
@@ -46,15 +30,7 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "donationhubapi",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "donationhubusersapi",
+          "resourceName": "donationhubCentres",
           "attributes": [
             "Name",
             "Arn"

@@ -1,22 +1,18 @@
 export type AmplifyDependentResourcesAttributes = {
     "storage": {
-        "dynamodbDonationHub": {
+        "donationhubCentre": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",
             "PartitionKeyName": "string",
             "PartitionKeyType": "string",
+            "SortKeyName": "string",
+            "SortKeyType": "string",
             "Region": "string"
         }
     },
     "function": {
-        "donationhubapi": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
-        "donationhubusersapi": {
+        "donationhubCentres": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

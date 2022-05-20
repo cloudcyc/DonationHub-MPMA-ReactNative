@@ -14,11 +14,11 @@ using Amazon.DynamoDBv2;
 
 // If you rename this namespace, you will need to update the invocation shim
 // to match if you intend to test the function with 'amplify mock function'
-namespace donationhubapi
+namespace donationhubCentres
 {
     // If you rename this class, you will need to update the invocation shim
     // to match if you intend to test the function with 'amplify mock function'
-    public class donationhubapi
+    public class donationhubCentres
     {
         /// <summary>
         /// A Lambda function to respond to HTTP Get methods from API Gateway
@@ -44,26 +44,25 @@ namespace donationhubapi
 
             switch (request.HttpMethod) {
                 case "GET":
-                    // string selectedCentreID = "";
-                    if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("selectedCentreID"))
-                    {
+                //    if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("selectedCentreID"))
+                //     {
+                //         var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                //         var centres = await centreProvider.GetSelectedCentresAsync(request.QueryStringParameters["selectedCentreID"]);
+                //         return new APIGatewayProxyResponse
+                //         {
+                //             StatusCode = 200,
+                //             Body = JsonConvert.SerializeObject(centres)
+                //         };
+                //     }else 
+                    if (request.QueryStringParameters == null){
                         var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
-                        var centres = await centreProvider.GetSelectedCentresAsync(request.QueryStringParameters["selectedCentreID"]);
+                        var centres = await centreProvider.GetAllActiveCentresAsync();
                         return new APIGatewayProxyResponse
                         {
                             StatusCode = 200,
                             Body = JsonConvert.SerializeObject(centres)
                         };
-                    }else if (request.QueryStringParameters == null){
-                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
-                        var centres = await centreProvider.GetAllCentresAsync();
-                        return new APIGatewayProxyResponse
-                        {
-                            StatusCode = 200,
-                            Body = JsonConvert.SerializeObject(centres)
-                        };
-                    }
-                    
+                    } 
                     break;
                 case "POST":
                     context.Logger.LogLine($"Post Request: {request.Path}\n");
