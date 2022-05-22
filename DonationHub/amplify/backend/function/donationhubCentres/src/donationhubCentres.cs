@@ -44,33 +44,96 @@ namespace donationhubCentres
 
             switch (request.HttpMethod) {
                 case "GET":
-                //    if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("selectedCentreID"))
-                //     {
-                //         var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
-                //         var centres = await centreProvider.GetSelectedCentresAsync(request.QueryStringParameters["selectedCentreID"]);
-                //         return new APIGatewayProxyResponse
-                //         {
-                //             StatusCode = 200,
-                //             Body = JsonConvert.SerializeObject(centres)
-                //         };
-                //     }else 
-                    if (request.QueryStringParameters == null){
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID"))
+                    {
                         var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
-                        var centres = await centreProvider.GetAllActiveCentresAsync();
+                        var centres = await centreProvider.GetSelectedCentresByStatusAndIDAsync( request.QueryStringParameters["inputCentreID"] ,request.QueryStringParameters["inputCentreStatus"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(centres)
+                        };
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreStatus")){
+                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        var centres = await centreProvider.GetAllCentresByStatusAsync(request.QueryStringParameters["inputCentreStatus"]);
                         return new APIGatewayProxyResponse
                         {
                             StatusCode = 200,
                             Body = JsonConvert.SerializeObject(centres)
                         };
                     } 
+                    else if (request.QueryStringParameters == null){
+                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        var centres = await centreProvider.GetAllCentresByStatusAsync("Active");
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(centres)
+                        };
+                    }
+                    
+                     
                     break;
                 case "POST":
-                    context.Logger.LogLine($"Post Request: {request.Path}\n");
-                    if (!String.IsNullOrEmpty(contentType)) {
-                        context.Logger.LogLine($"Content type: {contentType}");
+                    var centre = JsonConvert.DeserializeObject<CentreModel>(request.Body);
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCurrentCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID"))
+                    {
+                        if (centre == null){
+                        return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (centre != null)
+                        {
+                            var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                            if (await centreProvider.AddNewCentreAsync(centre))
+                            {
+                                if (await centreProvider.DeleteSelectedCentresByStatusAndIDAsync(request.QueryStringParameters["inputCentreID"],request.QueryStringParameters["inputCurrentCentreStatus"]))
+                                {
+                                    return new APIGatewayProxyResponse 
+                                    { 
+                                        StatusCode = 200
+                                    };
+                                }
+                                else{
+                                    return new APIGatewayProxyResponse
+                                    {
+                                        StatusCode = 400
+                                    };
+                                }
+                            }
+                            else
+                            {
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 400
+                                };
+                            }
+                        }
+                    } else if(request.QueryStringParameters == null)
+                    {
+                        if (centre == null){
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (centre != null)
+                        {
+                            var addCentre = new CentreProvider(new AmazonDynamoDBClient());
+                            if (await addCentre.AddNewCentreAsync(centre))
+                            {
+                                return new APIGatewayProxyResponse 
+                                { 
+                                    StatusCode = 200
+                                };
+                            }
+                            else
+                            {
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 400
+                                };
+                            }
+                        }
                     }
-                    context.Logger.LogLine($"Body: {request.Body}");
-                    response.StatusCode = (int)HttpStatusCode.OK;
+                    
                     break;
                 case "PUT":
                     context.Logger.LogLine($"Put Request: {request.Path}\n");
@@ -81,8 +144,24 @@ namespace donationhubCentres
                     response.StatusCode = (int)HttpStatusCode.OK;
                     break;
                 case "DELETE":
-                    context.Logger.LogLine($"Delete Request: {request.Path}\n");
-                    response.StatusCode = (int)HttpStatusCode.OK;
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID"))
+                    {
+                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        if (await centreProvider.DeleteSelectedCentresByStatusAndIDAsync(request.QueryStringParameters["inputCentreID"],request.QueryStringParameters["inputCentreStatus"]))
+                        {
+                            return new APIGatewayProxyResponse 
+                            { 
+                                StatusCode = 200
+                            };
+                        }
+                        else{
+                            return new APIGatewayProxyResponse
+                            {
+                                StatusCode = 400
+                            };
+                        }
+                        
+                    } 
                     break;
                 default:
                     context.Logger.LogLine($"Unrecognized verb {request.HttpMethod}\n");
