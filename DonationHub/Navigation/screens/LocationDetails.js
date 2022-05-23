@@ -2,16 +2,18 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Newspaper from '../../assets/pavilion.jpeg';
 import { createOpenLink } from 'react-native-open-maps';
-
+import { useRoute } from "@react-navigation/native";
 
 
 function LocationDetails ({navigation}) {
-
+    
+    const route = useRoute();
     const {height} = useWindowDimensions();
-    const Pavilion = { latitude: 3.1482334236652827, longitude: 101.71304510925147 };
-    const openPavilion = createOpenLink({ ...Pavilion, zoom: 20 });
-
-
+    const coordinate = { latitude: parseFloat(route.params.centreCoordinate[1]) , longitude: parseFloat(route.params.centreCoordinate[0]) };
+    const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
+    
+    console.log(coordinate);
+    
     return(
         <View>
             <View style={styles.root}>
@@ -19,44 +21,39 @@ function LocationDetails ({navigation}) {
                     source={Newspaper}
                     style={[styles.image], {height: height * 0.3}}
                     resizeMode="contain"
-                />          
+                />
+                 
             </View>
 
             <View style={[styles.container]}>
-
+            <Text style={styles.title}>{route.params.centreName}</Text> 
             <ScrollView>
                 <View style={styles.container2}>
                     <Text style={styles.title}>Address:</Text>
-                    <Text style={styles.Desc}>168, Bukit Bintang St, Bukit Bintang, 55100 Kuala Lumpur, Federal Territory of Kuala Lumpur</Text>
+                    <Text style={styles.Desc}>
+                        {route.params.centreAddress}
+                    </Text>
                 </View>
 
-                <View style={styles.container2}>
+                {/* <View style={styles.container2}>
                     <Text style={styles.title}>Contact Number:</Text>
                     <Text style={styles.Desc}>03-2118 8833</Text>
-                </View>
+                </View> */}
 
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Open Hours:</Text>
+                    <Text style={styles.title}>Description:</Text>
                     <Text style={styles.Desc}>
-
-                        Monday	            Closed{"\n"}
-                        Tuesday            10am–10pm{"\n"}
-                        Wednesday	     10am–10pm{"\n"}
-                        Thursday	         10am–10pm{"\n"}
-                        Friday	               10am–10pm{"\n"}
-                        Saturday           10am–10pm{"\n"}
-                        Sunday	             10am–10pm{"\n"}
-
+                        {route.params.centreDescription}
                     </Text>
                     
                 </View>
 
                 <TouchableOpacity
                             style={styles.loginScreenButton}
-                            onPress={openPavilion}
+                            onPress={openCoordinate}
                             underlayColor='#fff'>
                             <Text style={styles.loginText}>View in Map</Text>
-                    </TouchableOpacity>
+                </TouchableOpacity>
 
                 </ScrollView>
 

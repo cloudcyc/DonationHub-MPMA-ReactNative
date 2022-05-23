@@ -36,7 +36,7 @@ function HomeScreen ({navigation}) {
                             return (
                                 
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('LocationDetails',item)}
+                                    onPress={() => navigation.navigate( 'LocationDetails', item)}
                                     style={styles.roundButton}>
                                     <Image style={styles.icon} source={{
                                         uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[item.centreID]+'.jpg',
