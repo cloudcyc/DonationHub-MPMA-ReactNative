@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInp
 
 function HomeScreen ({navigation}) {
     const [centreList, setcentreList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
     const getActiveCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Active';
     const getCentreList = () => {
         fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
@@ -12,6 +13,17 @@ function HomeScreen ({navigation}) {
         });
     }
 
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
+        
+      };
+
+    const filteredCentre = !search
+    ? centreList
+    : centreList.filter((filterCentre) =>
+        filterCentre.centreAddress.toLowerCase().includes(search.toLowerCase())
+      );
+
     React.useEffect(() => {
         getCentreList();
         
@@ -20,10 +32,12 @@ function HomeScreen ({navigation}) {
         // <ScrollView style={styles.root}>
         <View style={styles.root}>
             <View style={styles.containerSearch}>
-                <TextInput placeholder='Search Donate Centre'/>
+                <TextInput placeholder='Search Area'
+                     onChangeText ={(text) => handleSearchChange(text)}
+                />
             </View>
             <FlatList 
-                        data={centreList}
+                        data={filteredCentre}
                         keyExtractor= {(key) => {
                             return key.centreID;
                         }}
