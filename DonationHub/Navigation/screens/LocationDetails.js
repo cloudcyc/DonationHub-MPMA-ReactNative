@@ -12,17 +12,21 @@ function LocationDetails ({navigation}) {
     const coordinate = { latitude: parseFloat(route.params.centreCoordinate[1]) , longitude: parseFloat(route.params.centreCoordinate[0]) };
     const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
     
-    console.log(coordinate);
+    console.log('https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg');
     
     return(
         <View>
             <View style={styles.root}>
                 <Image 
-                    source={Newspaper}
+                    source={{
+                                uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'
+                            }}
                     style={[styles.image], {height: height * 0.3}}
                     resizeMode="contain"
                 />
-                 
+                 {/* <Image source={{
+                                        uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg',
+                                    }}/> */}
             </View>
 
             <View style={[styles.container]}>
