@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable,FlatList } from 'react-native';
 
-
-
-
-
 function HomeScreen ({navigation}) {
     const [centreList, setcentreList] = React.useState([]);
-    const getCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres';
+    const getActiveCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Active';
     const getCentreList = () => {
-        fetch(getCentreAPI).then((response) => response.json()).then((json) => { 
+        fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
             setcentreList(json);
         }).catch((error) => {
             console.error(error);
@@ -21,17 +17,16 @@ function HomeScreen ({navigation}) {
         
     },[]);
     return(
-        <ScrollView style={styles.root}>
-
+        // <ScrollView style={styles.root}>
+        <View style={styles.root}>
             <View style={styles.containerSearch}>
                 <TextInput placeholder='Search Donate Centre'/>
             </View>
-            <View>
-                <FlatList 
+            <FlatList 
                         style={styles.list}
                         data={centreList}
-                        keyExtractor= {(item) => {
-                            return item.centreID;
+                        keyExtractor= {(key) => {
+                            return key.centreID;
                         }}
                         ItemSeparatorComponent={() => {
                             return (
@@ -40,11 +35,12 @@ function HomeScreen ({navigation}) {
                         }}
                         renderItem={({item}) => {
                             return (
+                                
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('LocationDetails',item)}
                                     style={styles.roundButton}>
                                     <Image style={styles.icon} source={{
-                                        uri:'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
+                                        uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[item.centreID]+'.jpg',
                                     }}/>
                                     <Text style={styles.locationtitle}>{item.centreName}</Text>
                                     {/* <Text style={styles.locationtitle2}>Phone:      03-2118 8833</Text> */}
@@ -52,10 +48,10 @@ function HomeScreen ({navigation}) {
                                 </TouchableOpacity>
                             )
                         }}
-                >
-                </FlatList>
-            </View>
-        </ScrollView>
+            >
+            </FlatList> 
+        </View>  
+        // </ScrollView>
     )
 };
 
