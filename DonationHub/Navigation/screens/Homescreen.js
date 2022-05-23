@@ -23,7 +23,6 @@ function HomeScreen ({navigation}) {
                 <TextInput placeholder='Search Donate Centre'/>
             </View>
             <FlatList 
-                        style={styles.list}
                         data={centreList}
                         keyExtractor= {(key) => {
                             return key.centreID;
@@ -105,7 +104,6 @@ const styles = StyleSheet.create({
     },
     //List Design
     list: {
-        paddingHorizontal: 17,
         backgroundColor:"#E6E6E6",
       },
     separator: {
