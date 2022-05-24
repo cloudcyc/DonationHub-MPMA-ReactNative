@@ -18,17 +18,17 @@ function ProfileScreen ({navigation}) {
 
           <View style={styles.bodyContent}>
 
-              <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('HomeScreen')}>
+              {/* <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('HomeScreen')}>
                   <View style={styles.row}>
                       <Ionicons name='location-outline' size={35} />
                       <Text style={styles.ButtonText}>Our Locations</Text>
                   </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AddNewRequest')}>
                   <View style={styles.row}>
                       <Ionicons name='newspaper-outline' size={35} />
-                      <Text style={styles.ButtonText}>Report Missing Locations</Text>
+                      <Text style={styles.ButtonText}>Add Location Request</Text>
                   </View>
               </TouchableOpacity>
 

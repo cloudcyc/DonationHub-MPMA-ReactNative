@@ -1,67 +1,162 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { event } from 'react-native-reanimated';
-
+import uuid from 'react-native-uuid';
 function AddNewRequest ({navigation}) {
 
+    
+    const [centreName,setcentreName] = useState('');
+    const [centreDesc,setcentreDesc] = useState('');
+    const [centreAddress,setcentreAddress] = useState('');
+    const [centreLatitude,setcentreLatitude] = useState('');
+    const [centreLongitude,setcentreLongitude] = useState('');
+    const [currentTime,setcurrentTime] = useState('');
+    
+    const getcurrentTime = () => {
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
+        var hours = new Date().getHours(); //Current Hours
+        var min = new Date().getMinutes(); //Current Minutes
+        var sec = new Date().getSeconds(); //Current Seconds
+        setcurrentTime(
+          date + '/' + month + '/' + year 
+          + ' ' + hours + ':' + min + ':' + sec
+        );
+    }
+        
+    useEffect(() => {
+        getcurrentTime();
+    },[]); 
+
+    const addRequest = async () => {
+        let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
+                method: "POST",
+                body: JSON.stringify({
+                    centreID: 'cid' + uuid.v4(),
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: 'Pending',
+                    createdTime: currentTime
+                }),
+              }).then((res) => {
+                if (res.status == 200) {
+                        console.log("Item created successfully");
+                        navigation.navigate('HomeTabs')
+                      } else {
+                        console.log("Some error occured: ");
+                        console.log(res.status)
+                        console.log(res)
+                      }
+              });
+    }
+
     return(
-        <View style={styles.root}>
+        <ScrollView style={styles.root}>
             
-            <Text style={styles.title}>A Location Missing?</Text>
+            <Text style={styles.title}>Location Request Form</Text>
             <Text style={styles.description}>Feel free to let us know about location details</Text>
 
             <View>
-                <Text style={styles.title2}>Name:</Text>
+                <Text style={styles.title2}>Centre Name:</Text>
                 <View style={styles.sectionStyle}>
-                    <Image
+                    {/* <Image
                         source={{
                         uri:
                             'https://cdn-icons.flaticon.com/png/512/1144/premium/1144760.png?token=exp=1652674651~hmac=c2ada6e2765279598bf08d0bcdee3d36',
                         }}
                         style={styles.imageStyle}
-                    />
+                    /> */}
+                    <Ionicons name='cube-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder="Enter Your Name Here"
+                        placeholder="Enter Centre Name Here"
                         underlineColorAndroid="transparent"
+                        value={centreName} onChangeText = {(val) => setcentreName(val)}
                     />
                 </View>
             </View>
 
             <View>
-                <Text style={styles.title2}>Phone Number:</Text>
+                <Text style={styles.title2}>Centre Address:</Text>
                 <View style={styles.sectionStyle}>
-                    <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
-                        }}
-                        style={styles.imageStyle}
-                    />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Your Contact Number Here"
-                        underlineColorAndroid="transparent"
-                        keyboardType="phone-pad"
-                    />
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Name of Location:</Text>
-                <View style={styles.sectionStyle}>
-                    <Image
+                    {/* <Image
                         source={{
                         uri:
                             'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
                         }}
                         style={styles.imageStyle}
-                    />
+                    /> */}
+                    <Ionicons name='cube-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder="Enter The Missing Location's Name"
+                        placeholder="Enter The Centre Address"
                         underlineColorAndroid="transparent"
+                        value={centreAddress} onChangeText = {(val) => setcentreAddress(val)}
+                    />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Centre Coordinate</Text>
+                <Text style={styles.title3}>Latitude:</Text>
+                <View style={styles.sectionStyle}>
+                    {/* <Image
+                        source={{
+                        uri:
+                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
+                        }}
+                        style={styles.imageStyle}
+                    /> */}
+                    <Ionicons name='cube-outline' size={25} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Latitude. Eg: 3.0554"
+                        underlineColorAndroid="transparent"
+                        keyboardType="phone-pad"
+                        value={centreLatitude} onChangeText = {(val) => setcentreLatitude(val)}
+                    />
+                </View>
+                <Text style={styles.title3}>Longitude:</Text>
+                <View style={styles.sectionStyle}>
+                    {/* <Image
+                        source={{
+                        uri:
+                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
+                        }}
+                        style={styles.imageStyle}
+                    /> */}
+                    <Ionicons name='cube-outline' size={25} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Longitude. Eg: 101.7006"
+                        underlineColorAndroid="transparent"
+                        keyboardType="phone-pad"
+                        value={centreLongitude} onChangeText = {(val) => setcentreLongitude(val)}
+                    />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Centre Description</Text>
+                <View style={styles.sectionStyle}>
+                    {/* <Image
+                        source={{
+                        uri:
+                            'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
+                        }}
+                        style={styles.imageStyle}
+                    /> */}
+                    <Ionicons name='cube-outline' size={25} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Centre Description"
+                        underlineColorAndroid="transparent"
+                        value={centreDesc} onChangeText = {(val) => setcentreDesc(val)}
                     />
                 </View>
             </View>
@@ -70,14 +165,15 @@ function AddNewRequest ({navigation}) {
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('HomeScreen')}
+                    onPress={() => addRequest()}
+                    // onPress={() => navigation.navigate('HomeTabs')}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
                 </TouchableOpacity>
 
             </View>
                 
-        </View>
+        </ScrollView>
     )
 }
 
@@ -109,6 +205,13 @@ const styles = StyleSheet.create({
 
     title2:{
         paddingTop: 25,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fb5607',
+    },
+
+    title3:{
+        paddingTop: 5,
         fontSize: 15,
         fontWeight: 'bold',
         color: '#fb5607',
@@ -254,7 +357,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center', 
         alignItems: 'center',
-        position: 'absolute',
+        // position: 'absolute',
         bottom: 0,
         width:'100%',
         marginLeft:20

@@ -21,16 +21,6 @@ function LocationDetails ({navigation}) {
             <Image source={{uri: 'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
                 style={{width: 400, height: 250}}
                 resizeMode='stretch' />
-                {/* <Image 
-                    source={{
-                                uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'
-                            }}
-                    style={[styles.image], {height: height * 0.3}}
-                    resizeMode="contain"
-                /> */}
-                 {/* <Image source={{
-                                        uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg',
-                                    }}/> */}
             </View>
 
             <View style={[styles.container]}>
