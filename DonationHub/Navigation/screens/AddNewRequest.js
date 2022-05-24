@@ -13,6 +13,18 @@ function AddNewRequest ({navigation}) {
     const [centreLatitude,setcentreLatitude] = useState('');
     const [centreLongitude,setcentreLongitude] = useState('');
     const [currentTime,setcurrentTime] = useState('');
+    const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
+
+    const choosePhotoFromLibrary = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+            console.log(image);
+            setImage(image.path);
+          });
+    };
     
     const getcurrentTime = () => {
         var date = new Date().getDate(); //Current Date
@@ -45,9 +57,11 @@ function AddNewRequest ({navigation}) {
                 }),
               }).then((res) => {
                 if (res.status == 200) {
+                        alert("Item created successfully")
                         console.log("Item created successfully");
                         navigation.navigate('HomeTabs')
                       } else {
+                        alert("Item created failed")
                         console.log("Some error occured: ");
                         console.log(res.status)
                         console.log(res)
@@ -71,7 +85,7 @@ function AddNewRequest ({navigation}) {
                         }}
                         style={styles.imageStyle}
                     /> */}
-                    <Ionicons name='cube-outline' size={25} />
+                    <Ionicons name='business-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter Centre Name Here"
@@ -91,7 +105,7 @@ function AddNewRequest ({navigation}) {
                         }}
                         style={styles.imageStyle}
                     /> */}
-                    <Ionicons name='cube-outline' size={25} />
+                    <Ionicons name='location-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter The Centre Address"
@@ -112,7 +126,7 @@ function AddNewRequest ({navigation}) {
                         }}
                         style={styles.imageStyle}
                     /> */}
-                    <Ionicons name='cube-outline' size={25} />
+                    <Ionicons name='navigate-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter Latitude. Eg: 3.0554"
@@ -130,7 +144,7 @@ function AddNewRequest ({navigation}) {
                         }}
                         style={styles.imageStyle}
                     /> */}
-                    <Ionicons name='cube-outline' size={25} />
+                    <Ionicons name='navigate-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter Longitude. Eg: 101.7006"
@@ -151,13 +165,28 @@ function AddNewRequest ({navigation}) {
                         }}
                         style={styles.imageStyle}
                     /> */}
-                    <Ionicons name='cube-outline' size={25} />
+                    <Ionicons name='document-text-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter Centre Description"
                         underlineColorAndroid="transparent"
                         value={centreDesc} onChangeText = {(val) => setcentreDesc(val)}
                     />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Add Images:</Text>
+                <View style={styles.sectionStyle4}>
+                    <TouchableOpacity onPress={choosePhotoFromLibrary}>
+                    <Image
+                        source={{
+                        uri:
+                            image,
+                        }}
+                        style={styles.imageStyle2}
+                    />
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -360,7 +389,6 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         bottom: 0,
         width:'100%',
-        marginLeft:20
     },
 
 })
