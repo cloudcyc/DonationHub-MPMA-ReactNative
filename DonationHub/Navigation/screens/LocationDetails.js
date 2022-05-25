@@ -11,9 +11,7 @@ function LocationDetails ({navigation}) {
     const {height} = useWindowDimensions();
     const coordinate = { latitude: parseFloat(route.params.centreCoordinate[1]) , longitude: parseFloat(route.params.centreCoordinate[0]) };
     const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
-    
-    console.log('https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg');
-    
+    console.log(route.params.centreID);
     return(
         <View>
             <View style={styles.root}>

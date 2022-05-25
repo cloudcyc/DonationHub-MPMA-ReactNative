@@ -53,7 +53,8 @@ function AddNewRequest ({navigation}) {
                     centreCoordinate: [ centreLatitude, centreLongitude ],
                     centreDescription: centreDesc,
                     centreStatus: 'Pending',
-                    createdTime: currentTime
+                    createdTime: currentTime,
+                    centreImage: image
                 }),
               }).then((res) => {
                 if (res.status == 200) {
@@ -195,7 +196,7 @@ function AddNewRequest ({navigation}) {
                 <TouchableOpacity
                     style={styles.loginScreenButton}
                     onPress={() => addRequest()}
-                    // onPress={() => navigation.navigate('HomeTabs')}
+                    
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
                 </TouchableOpacity>

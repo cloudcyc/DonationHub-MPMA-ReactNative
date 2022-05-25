@@ -10,6 +10,7 @@ namespace donationhubCentres
                 public string centreDescription {get; set;}
                 public string centreStatus {get; set;}
                 public string createdTime {get; set;}
+                public string centreImage {get; set;}
         }
 
 }

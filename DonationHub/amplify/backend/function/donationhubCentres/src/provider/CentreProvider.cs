@@ -144,15 +144,15 @@ namespace donationhubCentres
                 }
             };
             var response = await dynamoDB.PutItemAsync(request);
-            // var client = new AmazonS3Client();
-            // await client.PutObjectAsync (new Amazon.S3.Model.PutObjectRequest
-            // {
-            //     BucketName = "nics3test8860/DonationHub",
-            //     Key = $"{user.userFullname}.txt",
-            //     ContentType = "text/plain",
-            //     ContentBody = $"I am {user.userFullname}"
+            var client = new AmazonS3Client();
+            await client.PutObjectAsync (new Amazon.S3.Model.PutObjectRequest
+            {
+                BucketName = "nics3test8860/DonationCentreAsset",
+                Key = $"{centre.centreID}.jpg",
+                ContentType = "image/jpeg",
+                ContentBody = centre.centreImage
 
-            // });
+            });
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
 
