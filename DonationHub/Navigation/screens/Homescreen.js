@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInp
 function HomeScreen ({navigation}) {
     const [centreList, setcentreList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
-    const getActiveCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Pending';
+    const getActiveCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Active';
     const getCentreList = () => {
         fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
             setcentreList(json);
