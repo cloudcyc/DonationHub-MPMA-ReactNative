@@ -1,6 +1,8 @@
 import React,{useState} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Picker } from "@react-native-picker/picker";
 import { event } from 'react-native-reanimated';
 
 function AdminAddLocation ({navigation}) {
@@ -18,106 +20,151 @@ function AdminAddLocation ({navigation}) {
           });
     };
 
+    const [status, setStatus] = useState('Unknown');
+
+
     return(
         <ScrollView style={styles.root}>
 
-            <View>
-                <Text style={styles.title2}>Location Name:</Text>
+<View>
+                <Text style={styles.title2}>Centre Name:</Text>
                 <View style={styles.sectionStyle}>
-                    <Image
+                    {/* <Image
                         source={{
                         uri:
-                            'https://cdn-icons.flaticon.com/png/128/2838/premium/2838912.png?token=exp=1652467613~hmac=6aeae007c91532f18dc3c304df0d28e8',
+                            'https://cdn-icons.flaticon.com/png/512/1144/premium/1144760.png?token=exp=1652674651~hmac=c2ada6e2765279598bf08d0bcdee3d36',
                         }}
                         style={styles.imageStyle}
-                    />
+                    /> */}
+                    <Ionicons name='business-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder="Enter Location Name Here"
+                        placeholder="Enter Centre Name Here"
                         underlineColorAndroid="transparent"
                     />
                 </View>
             </View>
 
             <View>
-                <Text style={styles.title2}>Phone Number:</Text>
+                <Text style={styles.title2}>Centre Address:</Text>
                 <View style={styles.sectionStyle}>
-                    <Image
+                    {/* <Image
                         source={{
                         uri:
-                            'https://cdn-icons-png.flaticon.com/128/159/159832.png',
+                            'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
                         }}
                         style={styles.imageStyle}
-                    />
+                    /> */}
+                    <Ionicons name='location-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder="Enter Contact Number Here"
+                        placeholder="Enter The Centre Address"
                         underlineColorAndroid="transparent"
                     />
                 </View>
             </View>
 
             <View>
-                <Text style={styles.title2}>Address:</Text>
-                <View style={styles.sectionStyle2}>
-                    <Image
+                <Text style={styles.title2}>Centre Coordinate</Text>
+                <Text style={styles.title3}>Latitude:</Text>
+                <View style={styles.sectionStyle}>
+                    {/* <Image
                         source={{
                         uri:
-                            'https://cdn-icons.flaticon.com/png/128/3095/premium/3095581.png?token=exp=1652467660~hmac=d9791af8d7ed3de4f52c928e09de1559',
+                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
                         }}
                         style={styles.imageStyle}
-                    />
+                    /> */}
+                    <Ionicons name='navigate-outline' size={25} />
                     <TextInput
-                        multiline={true}
                         style={styles.textInputStyle}
-                        placeholder="Enter Address Here"
+                        placeholder="Enter Latitude. Eg: 3.0554"
+                        underlineColorAndroid="transparent"
+                        keyboardType="phone-pad"
+                    />
+                </View>
+                <Text style={styles.title3}>Longitude:</Text>
+                <View style={styles.sectionStyle}>
+                    {/* <Image
+                        source={{
+                        uri:
+                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
+                        }}
+                        style={styles.imageStyle}
+                    /> */}
+                    <Ionicons name='navigate-outline' size={25} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Longitude. Eg: 101.7006"
+                        underlineColorAndroid="transparent"
+                        keyboardType="phone-pad"
+                    />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Centre Description</Text>
+                <View style={styles.sectionStyle}>
+                    {/* <Image
+                        source={{
+                        uri:
+                            'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
+                        }}
+                        style={styles.imageStyle}
+                    /> */}
+                    <Ionicons name='document-text-outline' size={25} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Centre Description"
                         underlineColorAndroid="transparent"
                     />
                 </View>
             </View>
 
             <View>
-                <Text style={styles.title2}>Open Hours:</Text>
-                <View style={styles.sectionStyle2}>
+                <Text style={styles.title2}>Add Images:</Text>
+                <View style={styles.sectionStyle4}>
+                    <TouchableOpacity onPress={choosePhotoFromLibrary}>
                     <Image
                         source={{
                         uri:
-                            'https://cdn-icons-png.flaticon.com/128/694/694572.png',
+                            image,
                         }}
-                        style={styles.imageStyle}
+                        style={styles.imageStyle2}
                     />
-                    <TextInput
-                        multiline={true}
-                        style={styles.textInputStyle}
-                        placeholder="Enter Opening Hours Of The Location Here"
-                        underlineColorAndroid="transparent"
-                    />
+                    </TouchableOpacity>
                 </View>
             </View>
 
+            <View>
+
+            <Text style={styles.title2}>Status: {status}</Text>
+                <Picker
+                    selectedValue={status}
+                    onValueChange={(value, index) => setStatus(value)}
+                    mode="dropdown" // Android only
+                    style={styles.picker}>
+
+                    <Picker.Item label="Please select location status" value="Pending" />
+                    <Picker.Item label="Approved" value="Approved" />
+                    <Picker.Item label="Declined" value="Declined" />
+
+                </Picker>
+
+            </View>
 
 
-                <View>
-                    <Text style={styles.title2}>Add Images:</Text>
-                    <View style={styles.sectionStyle4}>
-                        <TouchableOpacity onPress={choosePhotoFromLibrary}>
-                        <Image
-                            source={{
-                            uri:
-                                image,
-                            }}
-                            style={styles.imageStyle2}
-                        />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+            <View style={[styles.bottomView]}>
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
                     onPress={() => navigation.navigate('Admin')}
+                    // onPress={() => navigation.navigate('HomeTabs')}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
                 </TouchableOpacity>
+
+            </View>
                 
         </ScrollView>
     )
@@ -292,6 +339,13 @@ const styles = StyleSheet.create({
           paddingLeft : 10,
           paddingRight : 10
     },
+
+    picker: {
+        marginVertical: 30,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "#666",
+      },
 
 })
 
