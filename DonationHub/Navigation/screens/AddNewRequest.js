@@ -4,6 +4,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { event } from 'react-native-reanimated';
 import uuid from 'react-native-uuid';
+import ImgToBase64 from 'react-native-image-base64';
+// import RNFetchBlob from "react-native-fetch-blob";
 function AddNewRequest ({navigation}) {
 
     
@@ -14,6 +16,7 @@ function AddNewRequest ({navigation}) {
     const [centreLongitude,setcentreLongitude] = useState('');
     const [currentTime,setcurrentTime] = useState('');
     const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
+    const [uploadImage, setuploadImage] = useState(null);
 
     const choosePhotoFromLibrary = () => {
         ImagePicker.openPicker({
@@ -22,6 +25,13 @@ function AddNewRequest ({navigation}) {
             cropping: true
           }).then(image => {
             console.log(image);
+            ImgToBase64.getBase64String(image.path)
+                .then(base64String => 
+                    setuploadImage(base64String)
+                    )
+                .catch(err => 
+                    alert("Something wrong here. Error: " + err)
+                    );
             setImage(image.path);
           });
     };
@@ -44,6 +54,7 @@ function AddNewRequest ({navigation}) {
     },[]); 
 
     const addRequest = async () => {
+        
         let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
                 method: "POST",
                 body: JSON.stringify({
@@ -54,15 +65,15 @@ function AddNewRequest ({navigation}) {
                     centreDescription: centreDesc,
                     centreStatus: 'Pending',
                     createdTime: currentTime,
-                    centreImage: image
+                    centreImage: uploadImage
                 }),
               }).then((res) => {
                 if (res.status == 200) {
-                        alert("Item created successfully")
+                        alert("Request successfully submitted.")
                         console.log("Item created successfully");
                         navigation.navigate('HomeTabs')
                       } else {
-                        alert("Item created failed")
+                        alert("Submission failed Error:" + res.status)
                         console.log("Some error occured: ");
                         console.log(res.status)
                         console.log(res)

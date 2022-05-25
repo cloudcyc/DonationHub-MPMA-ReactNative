@@ -4,7 +4,9 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.S3;
 using System.Collections.Generic;
 using System;
-
+using System.Text;
+using System.IO;
+using SixLabors.ImageSharp;
 
 
 namespace donationhubCentres
@@ -143,16 +145,28 @@ namespace donationhubCentres
                     {"createdTime", new AttributeValue(centre.createdTime)},
                 }
             };
-            var response = await dynamoDB.PutItemAsync(request);
-            var client = new AmazonS3Client();
-            await client.PutObjectAsync (new Amazon.S3.Model.PutObjectRequest
-            {
-                BucketName = "nics3test8860/DonationCentreAsset",
-                Key = $"{centre.centreID}.jpg",
-                ContentType = "image/jpeg",
-                ContentBody = centre.centreImage
+            
+            byte[] ImageBytes = Convert.FromBase64String(centre.centreImage);
+            string decodedString = Encoding.UTF8.GetString(ImageBytes);
+            
+            Image image = Image.Load(ImageBytes);
+            
 
-            });
+            var response = await dynamoDB.PutItemAsync(request);
+            Console.WriteLine(centre.centreImage);
+            var client = new AmazonS3Client();
+            // var decodedFile = 
+            using (var stream = new MemoryStream(ImageBytes)){
+                await client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
+                {
+                                BucketName = "nics3test8860/DonationCentreAsset",
+                                Key = $"{centre.centreID}.jpg",
+                                ContentType = "image/jpeg",
+                                InputStream = stream,
+                                CannedACL = S3CannedACL.PublicRead
+
+                });
+            }
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
 

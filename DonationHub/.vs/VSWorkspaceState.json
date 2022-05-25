@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\amplify",
+    "\\amplify\\backend",
+    "\\amplify\\backend\\function",
+    "\\amplify\\backend\\function\\donationhubCentres",
+    "\\amplify\\backend\\function\\donationhubCentres\\src",
+    "\\amplify\\backend\\function\\donationhubCentres\\src\\provider"
+  ],
+  "SelectedNode": "\\amplify\\backend\\function\\donationhubCentres\\src\\provider\\CentreProvider.cs",
+  "PreviewInSolutionExplorer": false
+}
