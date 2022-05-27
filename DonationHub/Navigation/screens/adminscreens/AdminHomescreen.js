@@ -1,45 +1,69 @@
 import * as React from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
+import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList } from 'react-native';
 
 
 function AdminHomeScreen ({navigation}) {
+    const [centreList, setcentreList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
+    const getActiveCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Active';
+    const getCentreList = () => {
+        fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
+            setcentreList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
+        
+      };
+    const filteredCentre = !search
+    ? centreList
+    : centreList.filter((filterCentre) =>
+        filterCentre.centreAddress.toLowerCase().includes(search.toLowerCase())
+      );
+
+    React.useEffect(() => {
+        getCentreList();
+        
+    },[]);
     return(
 
         <View>
 
-            <ScrollView style={styles.root}>
-
-                <View style={styles.containerSearch}>
-                    <TextInput placeholder='Search Donate Hub'/>
-                </View>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('AdminLocationDetails')}
-                    style={styles.roundButton}>
-                    <Image style={styles.icon} source={{
-                    uri:
-                        'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
-                    }}/>
-                    <Text style={styles.locationtitle}>Pavilion Kuala Lumpur</Text>
-                    <Text style={styles.locationtitle2}>Phone:      03-2118 8833</Text>
-                    <Text style={styles.locationtitle2}>Location:  Lot 5.100.00 Level 5, Pavilion Elite</Text>
-
-
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('AdminLocationDetails')}
-                    style={styles.roundButton}>
-                    <Image style={styles.icon} source={{
-                    uri:
-                        'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
-                    }}/>
-                    <Text style={styles.locationtitle}>KLCC Malaysia</Text>
-                    <Text style={styles.locationtitle2}>Phone:      03-2382 2828</Text>
-                    <Text style={styles.locationtitle2}>Location:  Lot 316-A, Level 3</Text>
-                </TouchableOpacity> 
-            </ScrollView>
-
+            
+            <View style={styles.containerSearch}>
+                <TextInput placeholder='Search Area'
+                     onChangeText ={(text) => handleSearchChange(text)}
+                />
+            </View>
+            <FlatList 
+                        data={filteredCentre}
+                        keyExtractor= {(key) => {
+                            return key.centreID;
+                        }}
+                        ItemSeparatorComponent={() => {
+                            return (
+                                <View style={styles.separator}/>
+                            )
+                        }}
+                        renderItem={({item}) => {
+                            return (
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate( 'AdminLocationDetails', item)}
+                                        style={styles.roundButton}>
+                                        <Image style={styles.icon} source={{
+                                            uri:'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[item.centreID]+'.jpg',
+                                        }}/>
+                                        <Text style={styles.locationtitle}>{item.centreName}</Text>
+                                        {/* <Text style={styles.locationtitle2}>Phone:      03-2118 8833</Text> */}
+                                        <Text style={styles.locationtitle2}>Location:  {item.centreAddress}</Text>
+                                    </TouchableOpacity>
+                                )
+                        }}
+            >
+            </FlatList> 
             <TouchableOpacity
                 onPress={() => navigation.navigate('AdminAddLocation')}
                 style={styles.roundButton1}>

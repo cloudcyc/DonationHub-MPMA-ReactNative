@@ -8,7 +8,10 @@ namespace donationhubCentres
         Task<CentreModel[]> GetAllCentresByStatusAsync(String inputCentreStatus);
         Task<CentreModel[]> GetSelectedCentresByStatusAndIDAsync(String inputCentreID, String inputCentreStatus);
         Task<bool> AddNewCentreAsync(CentreModel centre);
+        Task<bool> AddCentreWithoutImageAsync(CentreModel centre);
         Task<bool> DeleteSelectedCentresByStatusAndIDAsync(String inputCentreID, String inputCentreStatus);
-        Task<bool> UpdateCentreStatusAsync (String inputCentreID, String inputCurrentCentreStatus, String inputNewCentreStatus);
+        Task<bool> DeleteSelectedCentresByStatusAndIDWithoutImageAsync(String inputCentreID, String inputCentreStatus);
+        Task<bool> DeleteImageByIDAsync(String inputCentreID);
+    
     }
 }

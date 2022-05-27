@@ -170,29 +170,28 @@ namespace donationhubCentres
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        // Update Centre Status
-        public async Task<bool> UpdateCentreStatusAsync (String inputCentreID, String inputCurrentCentreStatus, String inputNewCentreStatus)
+        //Add Centre without Image
+        public async Task<bool> AddCentreWithoutImageAsync (CentreModel centre)
         {
-            var request = new UpdateItemRequest
+            var request = new PutItemRequest
             {
                 TableName = "centres-dev",
-                    Key = new Dictionary<string,AttributeValue>() 
-                    {
-                         { "centreStatus", new AttributeValue { S = inputCurrentCentreStatus } },
-                         { "centreID", new AttributeValue { S = inputCentreID } }
-                     },
-                     ExpressionAttributeValues = new Dictionary<string, AttributeValue>()
-                    {
-                        {":inputNewCentreStatus",new AttributeValue {S = inputNewCentreStatus}},
-                    },
-                    UpdateExpression = "SET centreStatus = :inputNewCentreStatus"
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    {"centreID", new AttributeValue(centre.centreID)},
+                    {"centreName", new AttributeValue(centre.centreName)},
+                    {"centreAddress", new AttributeValue(centre.centreAddress)},
+                    {"centreCoordinate", new AttributeValue(centre.centreCoordinate)},
+                    {"centreDescription", new AttributeValue(centre.centreDescription)},
+                    {"centreStatus", new AttributeValue(centre.centreStatus)},
+                    {"createdTime", new AttributeValue(centre.createdTime)},
+                }
             };
-            var response = await dynamoDB.UpdateItemAsync(request);
+
+            var response = await dynamoDB.PutItemAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        // Delete centre by status and ID
-        // example: /centres?inputCentreStatus=Active&inputCentreID=cid0002
         public async Task<bool> DeleteSelectedCentresByStatusAndIDAsync(String inputCentreID, String inputCentreStatus){
             var request = new DeleteItemRequest
                 {
@@ -203,7 +202,37 @@ namespace donationhubCentres
                      },
                 };
             var response = await dynamoDB.DeleteItemAsync(request);
+            await DeleteImageByIDAsync(inputCentreID);
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        } 
+
+        // Delete centre by status and ID
+        // example: /centres?inputCentreStatus=Active&inputCentreID=cid0002
+        public async Task<bool> DeleteSelectedCentresByStatusAndIDWithoutImageAsync(String inputCentreID, String inputCentreStatus){
+            var request = new DeleteItemRequest
+                {
+                    TableName = "centres-dev",
+                    Key = new Dictionary<string,AttributeValue>() {
+                         { "centreStatus", new AttributeValue { S = inputCentreStatus } },
+                         { "centreID", new AttributeValue { S = inputCentreID } }
+                     },
+                };
+            var response = await dynamoDB.DeleteItemAsync(request);
             
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        public async Task<bool> DeleteImageByIDAsync(String inputCentreID){
+            var client = new AmazonS3Client();
+            
+            var request = new Amazon.S3.Model.DeleteObjectRequest{
+                            BucketName = "nics3test8860/DonationCentreAsset",
+                            Key = $"{inputCentreID}.jpg"
+            };
+
+            var response = await client.DeleteObjectAsync(request);
+            Console.WriteLine(response.HttpStatusCode);
+
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }        
 

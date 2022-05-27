@@ -1,11 +1,55 @@
 import * as React from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
+import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable,FlatList} from 'react-native';
 
 function RequestScreen ({navigation}) {
+    const [RequestList, setRequestList] = React.useState([]);
+    const getPendingRequestAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Pending';
+
+    const getRequestList = () => {
+        fetch(getPendingRequestAPI).then((response) => response.json()).then((json) => { 
+            setRequestList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    React.useEffect(() => {
+        getRequestList();
+        
+    },[]);
     return(
-        <ScrollView style={styles.root}>
-            
-            <TouchableOpacity style={styles.container}                            
+        // <ScrollView style={styles.root}>
+        <View style={styles.root}>
+            <FlatList 
+                        data={RequestList}
+                        keyExtractor= {(key) => {
+                            return key.centreID;
+                        }}
+                        ItemSeparatorComponent={() => {
+                            return (
+                                <View style={styles.separator}/>
+                            )
+                        }}
+                        renderItem={({item}) => {
+                            return (
+                                <TouchableOpacity 
+                                    style={styles.container}                            
+                                    onPress={() => navigation.navigate('RequestDetailScreen',item)}>
+
+                                    <View style={styles.row}>
+                                        <Text style={styles.title}>{item.centreName}</Text>
+                                        <Text style={styles.pending}> {item.centreStatus} </Text>
+                                    </View>
+
+                                    <View style={styles.end}>
+                                        <Text style={styles.time}>{item.createdTime}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                )
+                        }}
+            >
+            </FlatList> 
+            {/* <TouchableOpacity style={styles.container}                            
             onPress={() => navigation.navigate('RequestDetailScreen')}>
                 <View style={styles.row}>
                     <Text style={styles.title}>Donate Clothes</Text>
@@ -54,9 +98,9 @@ function RequestScreen ({navigation}) {
                 <View style={styles.end}>
                     <Text style={styles.time}>18 April 2022 12:00 pm</Text>
                 </View>
-            </TouchableOpacity>
-            
-        </ScrollView>
+            </TouchableOpacity> */}
+            </View>
+        // </ScrollView>
     )
 }
 

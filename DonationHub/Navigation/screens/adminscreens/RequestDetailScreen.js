@@ -1,10 +1,72 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
-
+import { useRoute } from "@react-navigation/native";
 
 function RequestDetailScreen ({navigation}) {
 
     const {height} = useWindowDimensions();
+    const route = useRoute();
+    var postUpdateCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?';
+
+    const acceptRequest = async () => {
+        postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+ route.params.centreStatus +'&inputNewCentreStatus=Active&inputCentreID='+route.params.centreID;
+        
+        var data = {
+            centreID: route.params.centreID,
+            centreName: route.params.centreName,
+            centreAddress: route.params.centreAddress,
+            centreCoordinate: [ route.params.centreCoordinate[1], route.params.centreCoordinate[0] ],
+            centreDescription: route.params.centreDescription,
+            centreStatus: 'Active',
+            createdTime: route.params.createdTime
+        }
+
+        let res = await fetch(postUpdateCentreAPI, {
+            method: "POST",
+            body: JSON.stringify(data),
+          }).then((res) => {
+            if (res.status == 200) {
+                    alert("Request Approved successfully and activated.")
+                    console.log("Item created successfully");
+                    navigation.navigate('Admin')
+                  } else {
+                    alert("Centre update failed. Error:" + res.status)
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                  }
+          });
+    }
+    const declineRequest = async () => {
+
+        postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+ route.params.centreStatus +'&inputNewCentreStatus=Active&inputCentreID='+route.params.centreID;
+        
+        var data = {
+            centreID: route.params.centreID,
+            centreName: route.params.centreName,
+            centreAddress: route.params.centreAddress,
+            centreCoordinate: [ route.params.centreCoordinate[1], route.params.centreCoordinate[0] ],
+            centreDescription: route.params.centreDescription,
+            centreStatus: 'Decline',
+            createdTime: route.params.createdTime
+        }
+
+        let res = await fetch(postUpdateCentreAPI, {
+            method: "POST",
+            body: JSON.stringify(data),
+          }).then((res) => {
+            if (res.status == 200) {
+                    alert("Request declined successfully")
+                    console.log("Item created successfully");
+                    navigation.navigate('Admin')
+                  } else {
+                    alert("Centre update failed. Error:" + res.status)
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                  }
+          });
+    }
 
     return(
         <View>
@@ -12,25 +74,19 @@ function RequestDetailScreen ({navigation}) {
             <ScrollView style={[styles.container]}>
 
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Request ID:</Text>
-                    <Text style={styles.Desc}>ID000001</Text>
+                    <Text style={styles.title}>Centre Name:</Text>
+                    <Text style={styles.Desc}>{route.params.centreName}</Text>
                 </View>
 
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Name:</Text>
-                    <Text style={styles.Desc}>Elon Mask</Text>
+                    <Text style={styles.title}>Centre Address:</Text>
+                    <Text style={styles.Desc}>{route.params.centreAddress}</Text>
                 </View>
 
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Phone Number:</Text>
-                    <Text style={styles.Desc}>0123456789 Call me baby</Text>
+                    <Text style={styles.title}>Centre Description</Text>
+                    <Text style={styles.Desc}>{route.params.centreDescription}</Text>
                 </View>
-
-                <View style={styles.container2}>
-                    <Text style={styles.title}>Name of Location:</Text>
-                    <Text style={styles.Desc}>Genting Highland</Text>
-                </View>
-
 
             </ScrollView>
 
@@ -38,14 +94,14 @@ function RequestDetailScreen ({navigation}) {
 
                 <TouchableOpacity
                     style={styles.CancelButton}
-                    onPress={() => navigation.navigate('Admin')}
+                    onPress={() => declineRequest()}
                     underlayColor='#fff'>
                     <Text style={styles.buttonText}>Decline</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.backButton}
-                    onPress={() => navigation.navigate('Admin')}
+                    onPress={() => acceptRequest()}
                     underlayColor='#fff'>
                     <Text style={styles.buttonText}>Approve</Text>
                 </TouchableOpacity>

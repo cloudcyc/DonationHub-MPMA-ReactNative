@@ -2,35 +2,73 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Newspaper from '../../../assets/pavilion.jpeg';
 import { createOpenLink } from 'react-native-open-maps';
-
+import { useRoute } from "@react-navigation/native";
 
 
 function AdminLocationDetails ({navigation}) {
 
+    const route = useRoute();
     const {height} = useWindowDimensions();
-    const Pavilion = { latitude: 3.1482334236652827, longitude: 101.71304510925147 };
-    const openPavilion = createOpenLink({ ...Pavilion, zoom: 20 });
-
+    const coordinate = { latitude: parseFloat(route.params.centreCoordinate[1]) , longitude: parseFloat(route.params.centreCoordinate[0]) };
+    const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
+    console.log('https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg');
 
     return(
         <View>
             <View style={styles.root}>
-                <Image 
-                    source={Newspaper}
-                    style={[styles.image], {height: height * 0.3}}
-                    resizeMode="contain"
-                />          
+                <Image  source={{uri: 'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
+                        style={{width: 400, height: 250}}
+                        resizeMode='stretch' />        
             </View>
 
             <View style={[styles.container]}>
+                <Text style={styles.title}>{route.params.centreName}</Text> 
+                <ScrollView>
+                    <View style={styles.container2}>
+                        <Text style={styles.title}>Address:</Text>
+                        <Text style={styles.Desc}>
+                            {route.params.centreAddress}
+                        </Text>
+                    </View>
 
-            <ScrollView>
-                <View style={styles.container2}>
-                    <Text style={styles.title}>Address:</Text>
-                    <Text style={styles.Desc}>168, Bukit Bintang St, Bukit Bintang, 55100 Kuala Lumpur, Federal Territory of Kuala Lumpur</Text>
+                    <View style={styles.container2}>
+                    <Text style={styles.title}>Description:</Text>
+                    <Text style={styles.Desc}>
+                        {route.params.centreDescription}
+                    </Text>
+                    
                 </View>
 
-                <View style={styles.container2}>
+                <View style={[styles.bottomView]}>
+
+                    <TouchableOpacity
+                        style={styles.loginScreenButton}
+                        onPress={openCoordinate}
+                        underlayColor='#fff'>
+                        <Text style={styles.loginText}>View in Map</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.loginScreenButton2}
+                        onPress={() => navigation.navigate('AdminEditLocation', route.params)}
+                        underlayColor='#fff'>
+                        <Text style={styles.loginText}>Edit Details</Text>
+                    </TouchableOpacity>
+                
+                </View>
+
+
+                </ScrollView>
+
+            </View>
+
+            {/* <ScrollView> */}
+                {/* <View style={styles.container2}>
+                    <Text style={styles.title}>Address:</Text>
+                    <Text style={styles.Desc}>168, Bukit Bintang St, Bukit Bintang, 55100 Kuala Lumpur, Federal Territory of Kuala Lumpur</Text>
+                </View> */}
+
+                {/* <View style={styles.container2}>
                     <Text style={styles.title}>Contact Number:</Text>
                     <Text style={styles.Desc}>03-2118 8833</Text>
                 </View>
@@ -48,9 +86,9 @@ function AdminLocationDetails ({navigation}) {
                         Sunday	             10am–10pm{"\n"}
 
                     </Text>
-                </View>
+                </View> */}
 
-                <View style={[styles.bottomView]}>
+                {/* <View style={[styles.bottomView]}>
 
                     <TouchableOpacity
                         style={styles.loginScreenButton}
@@ -67,7 +105,7 @@ function AdminLocationDetails ({navigation}) {
                     </TouchableOpacity>
                 
                 </View>
-                </ScrollView>
+                </ScrollView> */}
 
                 
 
@@ -75,7 +113,7 @@ function AdminLocationDetails ({navigation}) {
 
             
             
-        </View>
+        // </View>
 
         
     )

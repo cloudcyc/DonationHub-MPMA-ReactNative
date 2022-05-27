@@ -43,12 +43,12 @@ namespace donationhubCentres
 
             string contentType = null;
             request.Headers?.TryGetValue("Content-Type", out contentType);
-
+            var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
             switch (request.HttpMethod) {
                 case "GET":
                     if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID"))
                     {
-                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        
                         var centres = await centreProvider.GetSelectedCentresByStatusAndIDAsync( request.QueryStringParameters["inputCentreID"] ,request.QueryStringParameters["inputCentreStatus"]);
                         return new APIGatewayProxyResponse
                         {
@@ -57,7 +57,7 @@ namespace donationhubCentres
                         };
                     }
                     else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreStatus")){
-                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        
                         var centres = await centreProvider.GetAllCentresByStatusAsync(request.QueryStringParameters["inputCentreStatus"]);
                         return new APIGatewayProxyResponse
                         {
@@ -66,7 +66,7 @@ namespace donationhubCentres
                         };
                     } 
                     else if (request.QueryStringParameters == null){
-                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        
                         var centres = await centreProvider.GetAllCentresByStatusAsync("Active");
                         return new APIGatewayProxyResponse
                         {
@@ -79,29 +79,97 @@ namespace donationhubCentres
                     break;
                 case "POST":
                     var centre = JsonConvert.DeserializeObject<CentreModel>(request.Body);
-                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCurrentCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID"))
+                    
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCurrentCentreStatus") && request.QueryStringParameters.ContainsKey("inputNewCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID") && request.QueryStringParameters.ContainsKey("NewImage"))
                     {
-                        if (centre == null){
-                        return new APIGatewayProxyResponse {StatusCode = 400};
+                        //condition: If got New Status and New Image
+                        //Add  + Delete with Image
+                        if (centre == null)
+                        {
+                            return new APIGatewayProxyResponse {StatusCode = 400};
                         }
                         else if (centre != null)
                         {
-                            var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
-                            if (await centreProvider.AddNewCentreAsync(centre))
+                            if (await centreProvider.DeleteSelectedCentresByStatusAndIDAsync(request.QueryStringParameters["inputCentreID"],request.QueryStringParameters["inputCurrentCentreStatus"]))
                             {
-                                if (await centreProvider.DeleteSelectedCentresByStatusAndIDAsync(request.QueryStringParameters["inputCentreID"],request.QueryStringParameters["inputCurrentCentreStatus"]))
+                                if (await centreProvider.AddNewCentreAsync(centre))
                                 {
-                                    return new APIGatewayProxyResponse 
-                                    { 
-                                        StatusCode = 200
-                                    };
+                                    return new APIGatewayProxyResponse { StatusCode = 200};
                                 }
                                 else{
-                                    return new APIGatewayProxyResponse
-                                    {
-                                        StatusCode = 400
-                                    };
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
                                 }
+                            }
+                            else{
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
+                                }
+                        }
+                        
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCurrentCentreStatus") && request.QueryStringParameters.ContainsKey("inputNewCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID")){
+                        //condition: If got New Status but no New Image
+                        //Add without Image + Delete without Image
+                        if (centre == null)
+                        {
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (centre != null)
+                        {
+                            if (await centreProvider.AddCentreWithoutImageAsync(centre))
+                            {
+                                if (await centreProvider.DeleteSelectedCentresByStatusAndIDWithoutImageAsync(request.QueryStringParameters["inputCentreID"],request.QueryStringParameters["inputCurrentCentreStatus"]))
+                                {
+                                    return new APIGatewayProxyResponse { StatusCode = 200};
+                                }
+                                else{
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
+                                }
+                            }
+                            else{
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
+                                }
+                        }
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCurrentCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID") && request.QueryStringParameters.ContainsKey("NewImage")){
+                        //condition: If no new Status but New Image
+                        //Add With NewImage + Only Delete Image
+                        if (centre == null)
+                        {
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (centre != null)
+                        {
+                            if (await centreProvider.DeleteImageByIDAsync(request.QueryStringParameters["inputCentreID"]))
+                            {
+                                return new APIGatewayProxyResponse {StatusCode = 400};
+                            }
+                            else{
+                                    
+                                    if (await centreProvider.AddNewCentreAsync(centre))
+                                {
+                                    return new APIGatewayProxyResponse { StatusCode = 200};
+                                }
+                                else{
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
+                                }
+                                }
+                        }
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCurrentCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID")){
+                        //condition: If No New Status and No New Image
+                        //Add Without Image
+                        if (centre == null)
+                        {
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (centre != null)
+                        {
+                            if (await centreProvider.AddCentreWithoutImageAsync(centre))
+                            {
+                                return new APIGatewayProxyResponse 
+                                { 
+                                    StatusCode = 200
+                                };
                             }
                             else
                             {
@@ -111,8 +179,10 @@ namespace donationhubCentres
                                 };
                             }
                         }
-                    } else if(request.QueryStringParameters == null)
+                    }
+                    else if(request.QueryStringParameters == null)
                     {
+                        //Condition Add New Centre
                         if (centre == null){
                             return new APIGatewayProxyResponse {StatusCode = 400};
                         }
@@ -146,9 +216,10 @@ namespace donationhubCentres
                     response.StatusCode = (int)HttpStatusCode.OK;
                     break;
                 case "DELETE":
+                
                     if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreStatus") && request.QueryStringParameters.ContainsKey("inputCentreID"))
                     {
-                        var centreProvider = new CentreProvider(new AmazonDynamoDBClient());
+                        
                         if (await centreProvider.DeleteSelectedCentresByStatusAndIDAsync(request.QueryStringParameters["inputCentreID"],request.QueryStringParameters["inputCentreStatus"]))
                         {
                             return new APIGatewayProxyResponse 
@@ -162,8 +233,26 @@ namespace donationhubCentres
                                 StatusCode = 400
                             };
                         }
-                        
-                    } 
+                    }else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputCentreID")){
+                        if (await centreProvider.DeleteImageByIDAsync(request.QueryStringParameters["inputCentreID"]))
+                        {
+                            return new APIGatewayProxyResponse 
+                            { 
+                                StatusCode = 400,
+                                Body = "Deleted Unsuccessfully"
+                            };
+                        }
+                        else{
+                            return new APIGatewayProxyResponse
+                            {
+                                //not sure why successful will be in else if
+                                StatusCode = 200,
+                                Body = "Deleted Successfully"
+                            };
+                            
+                        }
+                    }
+                    
                     break;
                 default:
                     context.Logger.LogLine($"Unrecognized verb {request.HttpMethod}\n");

@@ -4,11 +4,24 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Picker } from "@react-native-picker/picker";
 import { event } from 'react-native-reanimated';
-
+import { useRoute } from "@react-navigation/native";
+import ImgToBase64 from 'react-native-image-base64';
 function AdminEditLocation ({navigation}) {
+    const route = useRoute();
 
-    const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
-
+    const [centreID,setcentreID] = useState(route.params.centreID);
+    const [centreName,setcentreName] = useState(route.params.centreName);
+    const [centreDesc,setcentreDesc] = useState(route.params.centreDescription);
+    const [centreAddress,setcentreAddress] = useState(route.params.centreAddress);
+    const [centreLatitude,setcentreLatitude] = useState(route.params.centreCoordinate[1]);
+    const [centreLongitude,setcentreLongitude] = useState(route.params.centreCoordinate[0]);
+    const [createdTime,setcreatedTime] = useState(route.params.createdTime);
+    const [currentCentreStatus, setCurrentCentreStatus] = useState(route.params.centreStatus);
+    const [NewCentreStatus, setNewCentreStatus] = useState(null);
+    const [image, setImage] = useState('https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg');
+    const [uploadImage, setuploadImage] = useState(null);
+    var postUpdateCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?';
+    
     const choosePhotoFromLibrary = () => {
         ImagePicker.openPicker({
             width: 300,
@@ -16,31 +29,113 @@ function AdminEditLocation ({navigation}) {
             cropping: true
           }).then(image => {
             console.log(image);
+            ImgToBase64.getBase64String(image.path)
+                .then(base64String => 
+                    setuploadImage(base64String)
+                    )
+                .catch(err => 
+                    alert("Something wrong here. Error: " + err)
+                    );
             setImage(image.path);
           });
     };
 
-    const [status, setStatus] = useState('Unknown');
+
+    const updateCentre = async () => {
+        //inputCurrentCentreStatus=Inactive& inputNewCentreStatus=Active& inputCentreID=cid0003
+        if (currentCentreStatus == NewCentreStatus || NewCentreStatus == null)
+        {
+            postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+currentCentreStatus+'&inputCentreID='+centreID;
+            //Status Never changed
+            if (uploadImage != null){
+                //New Image
+                postUpdateCentreAPI = postUpdateCentreAPI+'&NewImage=True';
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: currentCentreStatus,
+                    createdTime: createdTime,
+                    centreImage: uploadImage
+                }
+                console.log(postUpdateCentreAPI);
+            }else{
+                //No New Image
+                console.log(postUpdateCentreAPI);
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: currentCentreStatus,
+                    createdTime: createdTime
+                }
+                console.log(data);
+            }
+        }
+        else if (currentCentreStatus != NewCentreStatus || NewCentreStatus != null){
+            //Status changed
+            postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+currentCentreStatus+'&inputNewCentreStatus=' + NewCentreStatus +'&inputCentreID='+centreID;
+            if (uploadImage != null){
+                //New Image
+                postUpdateCentreAPI = postUpdateCentreAPI+'&NewImage=True';
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: NewCentreStatus,
+                    createdTime: createdTime,
+                    centreImage: uploadImage
+                }
+            }else{
+                //No New Image
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: NewCentreStatus,
+                    createdTime: createdTime
+                }
+            }
+        }
+        let res = await fetch(postUpdateCentreAPI, {
+            method: "POST",
+            body: JSON.stringify(data),
+          }).then((res) => {
+            if (res.status == 200) {
+                    alert("Centre updated successfully.")
+                    console.log("Item created successfully");
+                    navigation.navigate('Admin')
+                  } else {
+                    alert("Centre update failed. Error:" + res.status)
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                  }
+          });
+    }
+    
 
 
     return(
         <ScrollView style={styles.root}>
 
-<View>
+            <View>
                 <Text style={styles.title2}>Centre Name:</Text>
                 <View style={styles.sectionStyle}>
-                    {/* <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/1144/premium/1144760.png?token=exp=1652674651~hmac=c2ada6e2765279598bf08d0bcdee3d36',
-                        }}
-                        style={styles.imageStyle}
-                    /> */}
                     <Ionicons name='business-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter Centre Name Here"
                         underlineColorAndroid="transparent"
+                        value={centreName} onChangeText = {(val) => setcentreName(val)}
                     />
                 </View>
             </View>
@@ -48,18 +143,12 @@ function AdminEditLocation ({navigation}) {
             <View>
                 <Text style={styles.title2}>Centre Address:</Text>
                 <View style={styles.sectionStyle}>
-                    {/* <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
-                        }}
-                        style={styles.imageStyle}
-                    /> */}
                     <Ionicons name='location-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter The Centre Address"
                         underlineColorAndroid="transparent"
+                        value= {centreAddress}
                     />
                 </View>
             </View>
@@ -81,6 +170,7 @@ function AdminEditLocation ({navigation}) {
                         placeholder="Enter Latitude. Eg: 3.0554"
                         underlineColorAndroid="transparent"
                         keyboardType="phone-pad"
+                        value= {centreLatitude}
                     />
                 </View>
                 <Text style={styles.title3}>Longitude:</Text>
@@ -98,6 +188,7 @@ function AdminEditLocation ({navigation}) {
                         placeholder="Enter Longitude. Eg: 101.7006"
                         underlineColorAndroid="transparent"
                         keyboardType="phone-pad"
+                        value= {centreLongitude}
                     />
                 </View>
             </View>
@@ -117,6 +208,7 @@ function AdminEditLocation ({navigation}) {
                         style={styles.textInputStyle}
                         placeholder="Enter Centre Description"
                         underlineColorAndroid="transparent"
+                        value= {centreDesc}
                     />
                 </View>
             </View>
@@ -138,16 +230,17 @@ function AdminEditLocation ({navigation}) {
 
             <View>
 
-            <Text style={styles.title2}>Status: {status}</Text>
+            <Text style={styles.title2}>Current Status: {currentCentreStatus}</Text>
                 <Picker
-                    selectedValue={status}
-                    onValueChange={(value, index) => setStatus(value)}
+                    selectedValue={NewCentreStatus}
+                    onValueChange={(value, index) => setNewCentreStatus(value)}
                     mode="dropdown" // Android only
                     style={styles.picker}>
+                    
 
-                    <Picker.Item label="Please select location status" value="Pending" />
-                    <Picker.Item label="Approved" value="Approved" />
-                    <Picker.Item label="Declined" value="Declined" />
+                    <Picker.Item label="Select location status to update" value= {null} />
+                    <Picker.Item label="Active" value="Active" />
+                    <Picker.Item label="Inactive" value="Inactive" />
 
                 </Picker>
 
@@ -158,7 +251,8 @@ function AdminEditLocation ({navigation}) {
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('Admin')}
+                    onPress={() => updateCentre()}
+                    // onPress={() => navigation.navigate('Admin')}
                     // onPress={() => navigation.navigate('HomeTabs')}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
