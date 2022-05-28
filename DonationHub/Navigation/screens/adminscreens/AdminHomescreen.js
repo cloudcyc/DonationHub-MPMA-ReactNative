@@ -30,7 +30,7 @@ function AdminHomeScreen ({navigation}) {
     },[]);
     return(
 
-        <View>
+        <View style={styles.root}>
 
             
             <View style={styles.containerSearch}>

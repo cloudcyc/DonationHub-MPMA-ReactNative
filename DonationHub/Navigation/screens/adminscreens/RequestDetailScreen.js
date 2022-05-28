@@ -71,6 +71,12 @@ function RequestDetailScreen ({navigation}) {
     return(
         <View>
 
+            <View style={styles.root}>
+                <Image  source={{uri: 'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
+                        style={{width: 400, height: 250}}
+                        resizeMode='stretch' />        
+            </View>
+
             <ScrollView style={[styles.container]}>
 
                 <View style={styles.container2}>
@@ -124,10 +130,10 @@ const styles = StyleSheet.create({
     },
 
     container:{
-        paddingTop:30,
+        paddingTop:265,
         paddingLeft:20,
         paddingRight:20,
-        height:'100%'
+        height:'100%',
    },
 
     container2:{
