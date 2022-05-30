@@ -1,7 +1,7 @@
 {
   "body": "eyJ0ZXN0IjoiYm9keSJ9",
   "resource": "/items/{proxy+}",
-  "path": "/item",
+  "path": "/users",
   "httpMethod": "POST",
   "isBase64Encoded": true,
   "queryStringParameters": {
@@ -11,7 +11,7 @@
     "foo": ["bar"]
   },
   "pathParameters": {
-    "proxy": "/item"
+    "proxy": "/users"
   },
   "stageVariables": {
     "baz": "qux"
@@ -76,7 +76,7 @@
       "userAgent": "Custom User Agent String",
       "user": null
     },
-    "path": "/item",
+    "path": "/users",
     "resourcePath": "/items/{proxy+}",
     "httpMethod": "GET",
     "apiId": "1234567890",

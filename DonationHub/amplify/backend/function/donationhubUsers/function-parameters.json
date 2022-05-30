@@ -1,3 +1,13 @@
 {
+  "permissions": {
+    "storage": {
+      "donationhubUser": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
   "lambdaLayers": []
 }

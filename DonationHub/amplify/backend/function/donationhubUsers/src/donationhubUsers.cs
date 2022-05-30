@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.DynamoDBv2;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -39,13 +41,19 @@ namespace donationhubUsers
 
             string contentType = null;
             request.Headers?.TryGetValue("Content-Type", out contentType);
-
+            var userProvider = new UserProvider(new AmazonDynamoDBClient());
             switch (request.HttpMethod) {
                 case "GET":
-                    context.Logger.LogLine($"Get Request: {request.Path}\n");
-                    response.StatusCode = (int)HttpStatusCode.OK;
-                    response.Body = "{ \"message\": \"Hello AWS Serverless\" }";
-                    response.Headers["Content-Type"] = "application/json";
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserEmail") && request.QueryStringParameters.ContainsKey("inputUserPassword"))
+                    // if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserEmail"))
+                    {
+                        var user = await userProvider.GetUserByEmailAndPasswordAsync(request.QueryStringParameters["inputUserEmail"],request.QueryStringParameters["inputUserPassword"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(user)
+                        };
+                    }
                     break;
                 case "POST":
                     context.Logger.LogLine($"Post Request: {request.Path}\n");
