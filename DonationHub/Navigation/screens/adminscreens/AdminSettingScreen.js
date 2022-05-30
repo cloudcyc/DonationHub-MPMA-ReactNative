@@ -15,11 +15,32 @@ function AdminSettingScreen ({navigation}) {
             </View>
           </View>
 
-          <View style={styles.bodyContent}>
+          <ScrollView style={styles.bodyContent}>
+
+            <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminEditProfileScreen')}>
+                  <View style={styles.row}>
+                      <Ionicons name='person-circle-outline' size={35} />
+                      <Text style={styles.ButtonText}>Edit Profile</Text>
+                  </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminManageAdminScreen')}>
+                  <View style={styles.row}>
+                      <Ionicons name='people-circle-outline' size={35} />
+                      <Text style={styles.ButtonText}>Manage Admins</Text>
+                  </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminViewAllLocationScreen')}>
+                  <View style={styles.row}>
+                      <Ionicons name='location-outline' size={35} />
+                      <Text style={styles.ButtonText}>View All Location</Text>
+                  </View>
+              </TouchableOpacity>
 
               <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminAddLocation')}>
                   <View style={styles.row}>
-                      <Ionicons name='person-circle-outline' size={35} />
+                      <Ionicons name='navigate-circle-outline' size={35} />
                       <Text style={styles.ButtonText}>Add New Location</Text>
                   </View>
               </TouchableOpacity>
@@ -31,7 +52,7 @@ function AdminSettingScreen ({navigation}) {
                   </View>
               </TouchableOpacity>
 
-          </View>
+          </ScrollView>
 
           <View style={styles.bottomView}>
 
@@ -115,7 +136,7 @@ const styles = StyleSheet.create({
     },
 
     bodyContent: {
-      alignItems: 'center',
+      //height:'100%'
     },
 
     ButtonContainer:{

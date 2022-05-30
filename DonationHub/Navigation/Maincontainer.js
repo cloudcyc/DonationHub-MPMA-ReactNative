@@ -13,6 +13,11 @@ import AdminAddLocation from './screens/adminscreens/AdminAddLocation';
 import AdminSettingScreen from './screens/adminscreens/AdminSettingScreen';
 import AdminEditLocation from './screens/adminscreens/AdminEditLocation';
 import AdminLocationDetails from './screens/adminscreens/AdminLocationDetails';
+import AdminViewAllLocationScreen from './screens/adminscreens/AdminViewAllLocation';
+import AdminEditProfileScreen from './screens/adminscreens/AdminEditProfile';
+import AdminManageAdminScreen from './screens/adminscreens/AdminManageAdmin';
+import AdminManageAdminProfile from './screens/adminscreens/AdminManageAdminProfile';
+import AddNewAdmin from './screens/adminscreens/AddNewAdmin';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -101,7 +106,13 @@ function HomeTabs() {
         <Stack.Screen name = 'Admin' component = {Admin} options={{headerShown: false,}} /> 
         <Stack.Screen name = 'AdminAddLocation' component = {AdminAddLocation} options={{title: '',headerTintColor:'black'}} />
         <Stack.Screen name = 'AdminEditLocation' component = {AdminEditLocation} options={{title: '',headerTintColor:'black'}} /> 
-        <Stack.Screen name = 'AdminLocationDetails' component = {AdminLocationDetails} options={{title: '',headerTintColor:'black'}} />   
+        <Stack.Screen name = 'AdminLocationDetails' component = {AdminLocationDetails} options={{title: '',headerTintColor:'black'}} /> 
+        <Stack.Screen name = 'AdminViewAllLocationScreen' component = {AdminViewAllLocationScreen} options={{title: '',headerTintColor:'black'}} />
+        <Stack.Screen name = 'AdminEditProfileScreen' component = {AdminEditProfileScreen} options={{title: '',headerTintColor:'black'}} /> 
+        <Stack.Screen name = 'AdminManageAdminScreen' component = {AdminManageAdminScreen} options={{title: '',headerTintColor:'black'}} />
+        <Stack.Screen name = 'AdminManageAdminProfile' component = {AdminManageAdminProfile} options={{title: '',headerTintColor:'black'}} />
+        <Stack.Screen name = 'AddNewAdmin' component = {AddNewAdmin} options={{title: '',headerTintColor:'black'}} />   
+   
       </Stack.Navigator>
       
     );
