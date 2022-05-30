@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable,FlatList } from 'react-native';
+import { useIsFocused } from "@react-navigation/native";
 
 function HomeScreen ({navigation}) {
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [centreList, setcentreList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
     const getActiveCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Active';
@@ -24,10 +26,13 @@ function HomeScreen ({navigation}) {
         filterCentre.centreAddress.toLowerCase().includes(search.toLowerCase())
       );
 
-    React.useEffect(() => {
-        getCentreList();
+      React.useEffect(() => {
+        if(isFocused){ 
+            getCentreList();
+        }
         
-    },[]);
+        
+    },[navigation, isFocused]);
     return(
         // <ScrollView style={styles.root}>
         <View style={styles.root}>
