@@ -3,6 +3,10 @@
     "donationhubCentre": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
+    },
+    "donationhubUser": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
     }
   },
   "function": {
@@ -21,6 +25,12 @@
           ]
         }
       ]
+    },
+    "donationhubUsers": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "api": {
@@ -31,6 +41,14 @@
         {
           "category": "function",
           "resourceName": "donationhubCentres",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "donationhubUsers",
           "attributes": [
             "Name",
             "Arn"

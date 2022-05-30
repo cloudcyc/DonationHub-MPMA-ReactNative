@@ -1,0 +1,26 @@
+{
+  "resourceName": "donationhubUser",
+  "tableName": "users",
+  "partitionKey": {
+    "fieldName": "userEmail",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "userID",
+    "fieldType": "string"
+  },
+  "gsi": [
+    {
+      "name": "userGSI",
+      "partitionKey": {
+        "fieldName": "userID",
+        "fieldType": "string"
+      },
+      "sortKey": {
+        "fieldName": "userFullname",
+        "fieldType": "string"
+      }
+    }
+  ],
+  "triggerFunctions": []
+}

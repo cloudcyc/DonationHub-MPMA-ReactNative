@@ -32,6 +32,10 @@
         "donationhubCentres": {
           "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
           "s3Key": "amplify-builds/donationhubCentres-6c7a724e766e2b493566-build.zip"
+        },
+        "donationhubUsers": {
+          "deploymentBucketName": "amplify-donationhubdb-dev-00219-deployment",
+          "s3Key": "amplify-builds/donationhubUsers-44684b71786b64547659-build.zip"
         }
       }
     }
