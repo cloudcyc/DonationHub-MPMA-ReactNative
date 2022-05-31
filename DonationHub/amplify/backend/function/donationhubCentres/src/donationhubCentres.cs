@@ -67,7 +67,7 @@ namespace donationhubCentres
                     } 
                     else if (request.QueryStringParameters == null){
                         
-                        var centres = await centreProvider.GetAllCentresByStatusAsync("Active");
+                        var centres = await centreProvider.GetAllCentresAsync();
                         return new APIGatewayProxyResponse
                         {
                             StatusCode = 200,

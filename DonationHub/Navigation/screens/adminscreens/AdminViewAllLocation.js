@@ -63,7 +63,7 @@ function AdminViewAllLocationScreen ({navigation}) {
                                         <Text style={styles.locationtitle}>{item.centreName}</Text>
                                         {/* <Text style={styles.locationtitle2}>Phone:      03-2118 8833</Text> */}
                                         <Text style={styles.locationtitle2}>Location:  {item.centreAddress}</Text>
-                                        <Text style={styles.locationtitle2}>Status:  Pending / Active</Text>
+                                        <Text style={styles.locationtitle2}>Status:  {item.centreStatus}</Text>
                                     </TouchableOpacity>
                                 )
                         }}

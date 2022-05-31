@@ -23,7 +23,7 @@ namespace donationhubCentres
             // dynamoDB.ScanAsync used to get All
             // dynamoDB.GetItemAsync used to get single response
             // dynamoDB.BatchGetItemAsync used to get multiple response
-            var result = await dynamoDB.QueryAsync(new QueryRequest{
+            var result = await dynamoDB.ScanAsync(new ScanRequest{
                 TableName = "centres-dev",
             });
 
