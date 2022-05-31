@@ -25,6 +25,11 @@ namespace donationhubCentres
             // dynamoDB.BatchGetItemAsync used to get multiple response
             var result = await dynamoDB.ScanAsync(new ScanRequest{
                 TableName = "centres-dev",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":centreStatus1", new AttributeValue { S = "Decline" }},
+                    {":centreStatus2", new AttributeValue { S = "Pending" }}
+                },
+                FilterExpression = "centreStatus <> :centreStatus1 AND centreStatus <> :centreStatus2"
             });
 
             if (result != null && result.Items != null){
