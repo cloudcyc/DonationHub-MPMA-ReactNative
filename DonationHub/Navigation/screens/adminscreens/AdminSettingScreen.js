@@ -1,16 +1,30 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 Ionicons.loadFont();
 
 function AdminSettingScreen ({navigation}) {
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  const route = useRoute();
+  const [userID,setUserID] = useState('');
+  useEffect(() => {
+    AsyncStorage.getItem("userID").then((value) => {
+      setUserID(value);
+      console.log(userID)
+      
+    });
+  }, [isFocused]);
+
     return(
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerContent}>
                 <Image style={styles.avatar} source={{uri: 'https://media0.giphy.com/media/l0HlMURBbyUqF0XQI/giphy.gif?cid=ecf05e47rki362m4mls24ph5ed2qmz5gzg45rd5y8czpu4hc&rid=giphy.gif&ct=g'}}/>
                 <Text style={styles.name}>
-                  Donation Hub
+                  User ID: {userID}
                 </Text>
             </View>
           </View>

@@ -1,13 +1,45 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Logo from '../../../assets/Donatehublogo.png'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 Ionicons.loadFont();
 
 
 
 function LoginScreen ({navigation}) {
-
+    const [userEmail,setUserEmail] = useState('');
+    const [userPassword,setUserPassword] = useState('');
+    const [userInfo, setUserInfo] = useState([]);
+    var getUsersAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ userEmail +'&inputUserPassword='+ userPassword;
+    const loginFunction = async () => {
+        console.log(getUsersAPI);
+        fetch(getUsersAPI).then((response) => response.json()).then((json) => {
+            // console.log(json);
+            setUserInfo(json);
+            console.log(userInfo);
+            if (userInfo.length > 0){
+                alert('Signed in');
+                AsyncStorage.setItem('userID',userInfo[0].userID);
+                navigation.navigate('Admin');
+              }else{
+                alert("Login failed. Incorrect Email or Password");
+              }
+            // console.log(userInfo[0].userID);
+            // const userInfo = Object.assign({...json}); 
+            // AsyncStorage.setItem('userID',userInfo[0].userID.toString());
+            // console.log('Signed in');
+            // navigation.navigate('Home')
+     
+      }).catch((error) => {
+            alert("Login Fail Error: " + res.status)
+            console.log("Some error occured: ");
+            console.log(res.status)
+            console.log(res)
+      });
+      
+      
+    }
    
     return(
         <View style={styles.root}>
@@ -30,6 +62,7 @@ function LoginScreen ({navigation}) {
                     placeholder="Enter Your Email Here"
                     underlineColorAndroid="transparent"
                     keyboardType="email-address"
+                    value={userEmail} onChangeText = {(val) => setUserEmail(val)}
                 />
             </View>
 
@@ -46,13 +79,14 @@ function LoginScreen ({navigation}) {
                     placeholder="Enter Your Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
+                    value={userPassword} onChangeText = {(val) => setUserPassword(val)}
                     
                 />
             </View>
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('Admin')}
+                    onPress={() => loginFunction()}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>

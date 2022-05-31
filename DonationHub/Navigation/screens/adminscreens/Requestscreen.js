@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable,FlatList} from 'react-native';
-
+import { useIsFocused } from "@react-navigation/native";
 function RequestScreen ({navigation}) {
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [RequestList, setRequestList] = React.useState([]);
     const getPendingRequestAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Pending';
 
@@ -16,7 +17,7 @@ function RequestScreen ({navigation}) {
     React.useEffect(() => {
         getRequestList();
         
-    },[]);
+    },[isFocused]);
     return(
         // <ScrollView style={styles.root}>
         <View style={styles.root}>
