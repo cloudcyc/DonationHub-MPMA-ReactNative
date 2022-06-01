@@ -15,7 +15,6 @@ function AdminSettingScreen ({navigation}) {
 
   const getUserFunction = async(inputUserID) => {
     var getUsersAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+ inputUserID;
-    console.log(getUsersAPI);
     fetch(getUsersAPI).then((response) => response.json()).then((json) => {
       // console.log(json);
       // console.log(json[0].userFullname);
@@ -72,7 +71,7 @@ function AdminSettingScreen ({navigation}) {
                   </View>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminManageAdminScreen')}>
+              <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminManageAdminScreen',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='people-circle-outline' size={35} />
                       <Text style={styles.ButtonText}>Manage Admins</Text>

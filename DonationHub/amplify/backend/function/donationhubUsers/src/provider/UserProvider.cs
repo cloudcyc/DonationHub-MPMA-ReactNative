@@ -41,6 +41,7 @@ namespace donationhubUsers
                     item.TryGetValue("userFullname", out var userFullname);
                     item.TryGetValue("userPassword", out var userPassword);
                     item.TryGetValue("userDoB", out var userDoB);
+                    item.TryGetValue("userRole", out var userRole);
                     item.TryGetValue("createdTime", out var createdTime);
                     
                     user.Add(new UserModel{
@@ -49,6 +50,44 @@ namespace donationhubUsers
                         userFullname = userFullname?.S,
                         userPassword = userPassword?.S,
                         userDoB = userDoB?.S,
+                        userRole = userRole?.S,
+                        createdTime = createdTime?.S
+                    });
+                }
+                return user.ToArray();
+            }
+            return Array.Empty<UserModel>();
+        }
+
+        public async Task<UserModel[]> GetUserByEmailAsync(string inputUserEmail)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "users-dev",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":userEmail", new AttributeValue { S = inputUserEmail }},
+                    
+                },
+                KeyConditionExpression = "userEmail = :userEmail",
+            });
+
+            if (result != null && result.Items != null){
+                var user = new  List<UserModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("userEmail", out var userEmail);
+                    item.TryGetValue("userFullname", out var userFullname);
+                    item.TryGetValue("userPassword", out var userPassword);
+                    item.TryGetValue("userDoB", out var userDoB);
+                    item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("createdTime", out var createdTime);
+                    
+                    user.Add(new UserModel{
+                        userID = userID?.S,
+                        userEmail = userEmail?.S,
+                        userFullname = userFullname?.S,
+                        userPassword = userPassword?.S,
+                        userDoB = userDoB?.S,
+                        userRole = userRole?.S,
                         createdTime = createdTime?.S
                     });
                 }
@@ -92,6 +131,66 @@ namespace donationhubUsers
                 return user.ToArray();
             }
             return Array.Empty<UserModel>();
+        }
+
+        public async Task<UserModel[]> GetOtherAdminAsync(string inputUserRole,string inputUserID)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "users-dev",
+                IndexName = "userRole-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":userID", new AttributeValue { S = inputUserID }},
+                    {":userRole", new AttributeValue { S = inputUserRole }}
+                },
+                KeyConditionExpression = "userRole = :userRole",
+                FilterExpression = "userID <> :userID"
+            });
+
+            if (result != null && result.Items != null){
+                var user = new  List<UserModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("userEmail", out var userEmail);
+                    item.TryGetValue("userFullname", out var userFullname);
+                    item.TryGetValue("userPassword", out var userPassword);
+                    item.TryGetValue("userDoB", out var userDoB);
+                    item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("createdTime", out var createdTime);
+                    
+                    user.Add(new UserModel{
+                        userID = userID?.S,
+                        userEmail = userEmail?.S,
+                        userFullname = userFullname?.S,
+                        userPassword = userPassword?.S,
+                        userDoB = userDoB?.S,
+                        userRole = userRole?.S,
+                        createdTime = createdTime?.S
+                    });
+                }
+                return user.ToArray();
+            }
+            return Array.Empty<UserModel>();
+        }
+
+        public async Task<bool> AddNewUser (UserModel user)
+        {
+            var request = new PutItemRequest
+            {
+                TableName = "users-dev",
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    {"userID", new AttributeValue(user.userID)},
+                    {"userFullname", new AttributeValue(user.userFullname)},
+                    {"userEmail", new AttributeValue(user.userEmail)},
+                    {"userPassword", new AttributeValue(user.userPassword)},
+                    {"userDoB", new AttributeValue(user.userDoB)},
+                    {"userRole", new AttributeValue(user.userRole)},
+                    {"createdTime", new AttributeValue(user.createdTime)},
+                }
+            };
+        
+            var response = await dynamoDB.PutItemAsync(request);
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
     }
 }

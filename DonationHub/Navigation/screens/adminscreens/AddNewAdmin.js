@@ -1,10 +1,121 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import uuid from 'react-native-uuid';
+import { Picker } from "@react-native-picker/picker";
 Ionicons.loadFont();
 
 
 function AddNewAdmin ({navigation}) {
+
+    const [userID,setuserID] = useState('');
+    const [userFullname,setuserFullname] = useState('');
+    const [userEmail,setuserEmail] = useState('');
+    const [userDoB,setuserDoB] = useState('12-05-2000"');
+    const [userPassword,setuserPassword] = useState('');
+    const [userConfirmPassword,setuserConfirmPassword] = useState('');
+    const [userRole,setuserRole] = useState(null);
+    const [currentTime,setcurrentTime] = useState('');
+    const [userExist, setuserExist] = useState();
+
+    const getcurrentTime = () => {
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
+        var hours = new Date().getHours(); //Current Hours
+        var min = new Date().getMinutes(); //Current Minutes
+        var sec = new Date().getSeconds(); //Current Seconds
+        setcurrentTime(
+          date + '/' + month + '/' + year 
+          + ' ' + hours + ':' + min + ':' + sec
+        );
+    }
+
+    useEffect(() => {
+        getcurrentTime();
+        //improvise for the moment on how to check email
+        checkEmailExist(userEmail);
+        console.log(userExist);
+    },[userEmail]); 
+    
+    const checkEmailExist = async(inputUserEmail) => {
+        var getUserbyEmailAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ inputUserEmail;
+        
+        fetch(getUserbyEmailAPI).then((response) => response.json()).then((json) => {
+            // return true;
+            if (json.length > 0){
+                //exist
+                returnTrue();
+                
+              }else{
+                //does not exist
+                returnFalse();
+                
+              } 
+                 
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    const returnTrue = () =>{
+        setuserExist(true);
+    }
+    const returnFalse = () =>{
+        setuserExist(false);
+    }
+
+    const addNewAdmin = async () => {
+        if (userPassword == userConfirmPassword){
+            checkEmailExist(userEmail);
+            // checkEmailExist(userEmail);
+            // const exist = checkEmailExist(userEmail);
+            
+            if (userExist == false){
+                if (userRole != null){
+                    let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?NewUser=true", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                userID: 'uid' + uuid.v4(),
+                                userEmail: userEmail,
+                                userFullname: userFullname,
+                                userPassword: userConfirmPassword,
+                                userDoB: userDoB,
+                                userRole: userRole,
+                                createdTime: currentTime
+                            }),
+                        }).then((res) => {
+                            if (res.status == 200) {
+                                    alert("Added successfully.")
+                                    console.log("Item created successfully");
+                                    navigation.navigate('Admin')
+                                } else {
+                                    alert("Submission failed Error:" + res.status)
+                                    console.log("Some error occured: ");
+                                    console.log(res.status)
+                                    console.log(res)
+                                }
+                        });
+                }
+                else {
+                    alert("Select a role");
+                }
+            }
+            else if (userExist == true){
+                alert("Email has been taken.");
+
+            }
+        }
+        else{
+            alert("Password does not match.");
+        }
+        
+    }
+    
+    
+        
+        
+    
+
     return(
         <View style={styles.root}>
 
@@ -24,6 +135,7 @@ function AddNewAdmin ({navigation}) {
                     placeholder="Enter Name Here"
                     underlineColorAndroid="transparent"
                     selectTextOnFocus={false}
+                    value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
             </View>
 
@@ -41,23 +153,24 @@ function AddNewAdmin ({navigation}) {
                     underlineColorAndroid="transparent"
                     keyboardType="email-address"
                     selectTextOnFocus={false}
+                    value={userEmail} onChangeText = {(val) => setuserEmail(val)}
                 />
             </View>
 
-            <View style={styles.sectionStyle}>
-                <Image
-                    source={{
-                    uri:
-                        'https://cdn-icons-png.flaticon.com/512/546/546394.png',
-                    }}
-                    style={styles.imageStyle}
-                />
-                <TextInput
-                    style={styles.textInputStyle}
-                    placeholder="Enter Position Here"
-                    underlineColorAndroid="transparent"
-                    selectTextOnFocus={false}
-                />
+            <View>
+                <Picker
+                    selectedValue={userRole}
+                    onValueChange={(value, index) => setuserRole(value)}
+                    mode="dropdown" // Android only
+                    style={styles.picker}>
+                    
+
+                    <Picker.Item label="Select a role" value= {null} />
+                    <Picker.Item label="Admin" value="Admin" />
+                    {/* <Picker.Item label="Member" value="Member" /> */}
+
+                </Picker>
+
             </View>
 
             <View style={styles.sectionStyle}>
@@ -68,6 +181,7 @@ function AddNewAdmin ({navigation}) {
                     placeholder="Enter Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
+                    value={userPassword} onChangeText = {(val) => setuserPassword(val)}
                 />
             </View>
 
@@ -79,12 +193,13 @@ function AddNewAdmin ({navigation}) {
                     placeholder="Enter Password Here Again"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
+                    value={userConfirmPassword} onChangeText = {(val) => setuserConfirmPassword(val)}
                 />
             </View>
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('AdminManageAdminScreen')}
+                    onPress={() => addNewAdmin()}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Update Profile</Text>
             </TouchableOpacity>

@@ -1,12 +1,70 @@
-import * as React from 'react';
-import { Image, StyleSheet, Text, View,TouchableHighlight, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
+import React,{useState, useEffect} from 'react';
+import { Image, StyleSheet, Text, View,TouchableHighlight, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 Ionicons.loadFont();
 
 function AdminManageAdminScreen ({navigation}) {
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  const route = useRoute();
+  console.log("this "+route.params.userID);
+  const [adminList, setadminList] = useState([]);
+  
+
+  const getAdminsFunction = async() => {
+    var getOtherAdminsAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserRole=Admin&inputUserID='+ route.params.userID;
+    console.log(getOtherAdminsAPI);
+    fetch(getOtherAdminsAPI).then((response) => response.json()).then((json) => {
+      setadminList(json);
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  };
+
+  
+
+  useEffect(() => {
+    getAdminsFunction();
+  }, [isFocused]);
+
     return(
         <View>
-            <ScrollView style={styles.root}>
+        <FlatList 
+                        data={adminList}
+                        keyExtractor= {(key) => {
+                            return key.userID;
+                        }}
+                        ItemSeparatorComponent={() => {
+                            return (
+                                <View style={styles.separator}/>
+                            )
+                        }}
+                        renderItem={({item}) => {
+                            return (
+                                <View style={styles.box}>
+                                  <Image style={styles.image} source={{uri: "https://bootdey.com/img/Content/avatar/avatar1.png"}} />
+                                  <View style={styles.boxContent}>
+                                    <Text style={styles.title}>{item.userFullname}</Text>
+                                    <Text style={styles.description}>{item.userEmail}</Text>
+                                    <Text style={styles.description}>{item.userRole}</Text>
+                                    <View style={styles.buttons}>
+                                      <TouchableOpacity style={[styles.button, styles.view]} onPress={() => navigation.navigate('AdminManageAdminProfile',item)}>
+                                        <Ionicons name='create-outline' size={25} />
+                                      </TouchableOpacity>
+
+                                      <TouchableOpacity style={[styles.button, styles.profile]}>
+                                          <Ionicons name='trash-outline' size={25} style={{color:'white'}} />
+                                      </TouchableOpacity>
+                                    </View>
+                                  </View>
+                                </View>
+                                )
+                        }}
+            >
+            </FlatList> 
+            {/* <ScrollView style={styles.root}>
                 <View style={styles.box}>
                     <Image style={styles.image} source={{uri: "https://bootdey.com/img/Content/avatar/avatar1.png"}} />
                     <View style={styles.boxContent}>
@@ -26,7 +84,7 @@ function AdminManageAdminScreen ({navigation}) {
                     </View>
                 </View>
                 
-            </ScrollView>
+            </ScrollView> */}
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('AddNewAdmin')}

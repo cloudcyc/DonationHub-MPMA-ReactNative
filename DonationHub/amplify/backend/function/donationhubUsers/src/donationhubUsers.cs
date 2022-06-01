@@ -47,31 +47,68 @@ namespace donationhubUsers
                     if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserEmail") && request.QueryStringParameters.ContainsKey("inputUserPassword"))
                     // if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserEmail"))
                     {
-                        var user = await userProvider.GetUserByEmailAndPasswordAsync(request.QueryStringParameters["inputUserEmail"],request.QueryStringParameters["inputUserPassword"]);
+                        var users = await userProvider.GetUserByEmailAndPasswordAsync(request.QueryStringParameters["inputUserEmail"],request.QueryStringParameters["inputUserPassword"]);
                         return new APIGatewayProxyResponse
                         {
                             StatusCode = 200,
-                            Body = JsonConvert.SerializeObject(user)
+                            Body = JsonConvert.SerializeObject(users)
+                        };
+                    }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserEmail"))
+                    {
+                        var users = await userProvider.GetUserByEmailAsync(request.QueryStringParameters["inputUserEmail"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(users)
+                        };
+                    }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserID") && request.QueryStringParameters.ContainsKey("inputUserRole"))
+                    {
+                        var users = await userProvider.GetOtherAdminAsync(request.QueryStringParameters["inputUserRole"],request.QueryStringParameters["inputUserID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(users)
                         };
                     }
                     else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserID"))
                     {
-                        var user = await userProvider.GetUserByIDAsync(request.QueryStringParameters["inputUserID"]);
+                        var users = await userProvider.GetUserByIDAsync(request.QueryStringParameters["inputUserID"]);
                         return new APIGatewayProxyResponse
                         {
                             StatusCode = 200,
-                            Body = JsonConvert.SerializeObject(user)
+                            Body = JsonConvert.SerializeObject(users)
                         };
                     }
                     
                     break;
                 case "POST":
-                    context.Logger.LogLine($"Post Request: {request.Path}\n");
-                    if (!String.IsNullOrEmpty(contentType)) {
-                        context.Logger.LogLine($"Content type: {contentType}");
+                var user = JsonConvert.DeserializeObject<UserModel>(request.Body);
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("NewUser"))
+                    {
+                        if (user == null)
+                        {
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (user != null)
+                        {
+                            if (await userProvider.AddNewUser(user))
+                            {
+                                return new APIGatewayProxyResponse 
+                                { 
+                                    StatusCode = 200
+                                };
+                            }
+                            else
+                            {
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 400
+                                };
+                            }
+                        }
                     }
-                    context.Logger.LogLine($"Body: {request.Body}");
-                    response.StatusCode = (int)HttpStatusCode.OK;
                     break;
                 case "PUT":
                     context.Logger.LogLine($"Put Request: {request.Path}\n");
