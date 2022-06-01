@@ -76,6 +76,7 @@ namespace donationhubUsers
                     item.TryGetValue("userFullname", out var userFullname);
                     item.TryGetValue("userPassword", out var userPassword);
                     item.TryGetValue("userDoB", out var userDoB);
+                    item.TryGetValue("userRole", out var userRole);
                     item.TryGetValue("createdTime", out var createdTime);
                     
                     user.Add(new UserModel{
@@ -84,6 +85,7 @@ namespace donationhubUsers
                         userFullname = userFullname?.S,
                         userPassword = userPassword?.S,
                         userDoB = userDoB?.S,
+                        userRole = userRole?.S,
                         createdTime = createdTime?.S
                     });
                 }

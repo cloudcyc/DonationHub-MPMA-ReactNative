@@ -1,14 +1,13 @@
 import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useRoute } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from "@react-navigation/native";
 Ionicons.loadFont();
 
 function AdminSettingScreen ({navigation}) {
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
-  const route = useRoute();
+  
   const [userID,setUserID] = useState('');
   const [userInfo, setUserInfo] = useState([]);
   const [userFullname, setUserFullname] = useState('Testing');
@@ -66,7 +65,7 @@ function AdminSettingScreen ({navigation}) {
 
           <ScrollView style={styles.bodyContent}>
 
-            <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminEditProfileScreen')}>
+            <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminEditProfileScreen', userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='person-circle-outline' size={35} />
                       <Text style={styles.ButtonText}>Edit Profile</Text>

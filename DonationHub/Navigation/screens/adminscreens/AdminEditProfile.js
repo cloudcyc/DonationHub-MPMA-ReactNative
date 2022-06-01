@@ -1,10 +1,21 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useRoute } from "@react-navigation/native";
 Ionicons.loadFont();
 
 
 function AdminEditProfileScreen ({navigation}) {
+    const route = useRoute();
+    
+    const [userID,setuserID] = useState(route.params.userID);
+    const [userFullname,setuserFullname] = useState(route.params.userFullname);
+    const [userEmail,setuserEmail] = useState(route.params.userEmail);
+    const [userDoB,setuserDoB] = useState(route.params.userDoB);
+    const [userPassword,setuserPassword] = useState(route.params.userPassword);
+    // const [userRole,setuserRole] = useState(route.params.centreCoordinate[0]);
+    
+
     return(
         <View style={styles.root}>
 
@@ -23,10 +34,29 @@ function AdminEditProfileScreen ({navigation}) {
                     style={styles.textInputStyle}
                     placeholder="Enter Your Name Here"
                     underlineColorAndroid="transparent"
-                    editable={false}
                     selectTextOnFocus={false}
+                    value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
             </View>
+
+            <View style={styles.sectionStyle}>
+                <Image
+                    source={{
+                    uri:
+                        'https://cdn-icons-png.flaticon.com/512/1828/1828439.png',
+                    }}
+                    style={styles.imageStyle}
+                />
+                <TextInput
+                    style={styles.textInputStyle}
+                    placeholder="DoB"
+                    underlineColorAndroid="transparent"
+                    selectTextOnFocus={false}
+                    value={userDoB} onChangeText = {(val) => setuserDoB(val)}
+                />
+                
+            </View>
+            <Text style={styles.title2}>Format: Day-Month-Year</Text>
 
             <View style={styles.sectionStyle}>
                 <Image
@@ -43,17 +73,22 @@ function AdminEditProfileScreen ({navigation}) {
                     keyboardType="email-address"
                     editable={false}
                     selectTextOnFocus={false}
+                    value={userEmail} onChangeText = {(val) => setuserEmail(val)}
                 />
             </View>
-
+            
+            
+            
             <View style={styles.sectionStyle}>
+            
             <Ionicons name='lock-closed-outline' size={30} style={{paddingLeft:5, paddingRight:7}}/>
 
                 <TextInput
                     style={styles.textInputStyle}
-                    placeholder="Enter Your Password Here"
+                    placeholder="Enter Your Old Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
+
                 />
             </View>
 
@@ -62,11 +97,12 @@ function AdminEditProfileScreen ({navigation}) {
 
                 <TextInput
                     style={styles.textInputStyle}
-                    placeholder="Enter Your Password Here Again"
+                    placeholder="Enter Your New Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
                 />
             </View>
+            <Text style={styles.title2}>Note: Changing password required to enter old and new password.</Text>
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
