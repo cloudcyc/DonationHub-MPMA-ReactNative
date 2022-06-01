@@ -10,13 +10,46 @@ function AdminSettingScreen ({navigation}) {
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const route = useRoute();
   const [userID,setUserID] = useState('');
-  useEffect(() => {
-    AsyncStorage.getItem("userID").then((value) => {
-      setUserID(value);
-      console.log(userID)
+  const [userInfo, setUserInfo] = useState([]);
+  const [userFullname, setUserFullname] = useState('Testing');
+
+
+  const getUserFunction = async(inputUserID) => {
+    var getUsersAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+ inputUserID;
+    console.log(getUsersAPI);
+    fetch(getUsersAPI).then((response) => response.json()).then((json) => {
+      // console.log(json);
+      // console.log(json[0].userFullname);
+      setUserInfo(json);
+      // console.log(userInfo);
+      setUserFullname(json[0].userFullname);
+      // console.log(userFullname);
       
+      
+    }).catch((error) => {
+      console.error(error);
     });
-  }, [isFocused]);
+
+  };
+
+  const retrieveUserID  = async () =>{
+    try {
+      const value = await AsyncStorage.getItem('userID')
+      if(value != null) {
+        // value previously stored
+        getUserFunction(value);
+        
+      }
+    } catch(e) {
+      // error reading value
+      console.log(e);
+    }
+  }
+
+
+  useEffect(() => {
+    retrieveUserID();
+  }, [navigation,isFocused]);
 
     return(
         <View style={styles.container}>
@@ -24,7 +57,9 @@ function AdminSettingScreen ({navigation}) {
             <View style={styles.headerContent}>
                 <Image style={styles.avatar} source={{uri: 'https://media0.giphy.com/media/l0HlMURBbyUqF0XQI/giphy.gif?cid=ecf05e47rki362m4mls24ph5ed2qmz5gzg45rd5y8czpu4hc&rid=giphy.gif&ct=g'}}/>
                 <Text style={styles.name}>
-                  User ID: {userID}
+                Welcome, {"\n"}
+                {userFullname}
+                  
                 </Text>
             </View>
           </View>

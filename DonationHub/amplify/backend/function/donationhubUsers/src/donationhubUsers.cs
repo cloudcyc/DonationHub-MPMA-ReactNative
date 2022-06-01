@@ -54,6 +54,16 @@ namespace donationhubUsers
                             Body = JsonConvert.SerializeObject(user)
                         };
                     }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserID"))
+                    {
+                        var user = await userProvider.GetUserByIDAsync(request.QueryStringParameters["inputUserID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(user)
+                        };
+                    }
+                    
                     break;
                 case "POST":
                     context.Logger.LogLine($"Post Request: {request.Path}\n");

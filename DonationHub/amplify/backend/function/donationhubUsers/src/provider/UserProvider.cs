@@ -56,5 +56,40 @@ namespace donationhubUsers
             }
             return Array.Empty<UserModel>();
         }
+
+        public async Task<UserModel[]> GetUserByIDAsync(string inputUserID)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "users-dev",
+                IndexName = "userGSI",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":userID", new AttributeValue { S = inputUserID }},
+                },
+                KeyConditionExpression = "userID = :userID",
+            });
+
+            if (result != null && result.Items != null){
+                var user = new  List<UserModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("userEmail", out var userEmail);
+                    item.TryGetValue("userFullname", out var userFullname);
+                    item.TryGetValue("userPassword", out var userPassword);
+                    item.TryGetValue("userDoB", out var userDoB);
+                    item.TryGetValue("createdTime", out var createdTime);
+                    
+                    user.Add(new UserModel{
+                        userID = userID?.S,
+                        userEmail = userEmail?.S,
+                        userFullname = userFullname?.S,
+                        userPassword = userPassword?.S,
+                        userDoB = userDoB?.S,
+                        createdTime = createdTime?.S
+                    });
+                }
+                return user.ToArray();
+            }
+            return Array.Empty<UserModel>();
+        }
     }
 }

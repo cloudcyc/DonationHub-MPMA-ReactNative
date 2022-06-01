@@ -11,35 +11,42 @@ function LoginScreen ({navigation}) {
     const [userEmail,setUserEmail] = useState('');
     const [userPassword,setUserPassword] = useState('');
     const [userInfo, setUserInfo] = useState([]);
-    var getUsersAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ userEmail +'&inputUserPassword='+ userPassword;
+    const [userID, setUserID] = useState(null);
+    
     const loginFunction = async () => {
-        console.log(getUsersAPI);
+        // console.log(getUsersAPI);
+        var getUsersAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ userEmail +'&inputUserPassword='+ userPassword;
         fetch(getUsersAPI).then((response) => response.json()).then((json) => {
-            // console.log(json);
-            setUserInfo(json);
-            console.log(userInfo);
-            if (userInfo.length > 0){
-                alert('Signed in');
-                AsyncStorage.setItem('userID',userInfo[0].userID);
-                navigation.navigate('Admin');
+            console.log(json[0].userID)
+            if (json.length > 0){
+                alert("Login Success");
+                if (storeData(json[0].userID)){
+                    navigation.navigate('Admin');
+                }
+                else{
+                    console.log("fail to store");
+                }
+
               }else{
                 alert("Login failed. Incorrect Email or Password");
-              }
-            // console.log(userInfo[0].userID);
-            // const userInfo = Object.assign({...json}); 
-            // AsyncStorage.setItem('userID',userInfo[0].userID.toString());
-            // console.log('Signed in');
-            // navigation.navigate('Home')
-     
-      }).catch((error) => {
-            alert("Login Fail Error: " + res.status)
-            console.log("Some error occured: ");
-            console.log(res.status)
-            console.log(res)
-      });
-      
-      
+                
+              }  
+        }).catch((error) => {
+            console.log("HELLO");
+            console.error(error);
+        });
+  
     }
+    
+    const storeData = async (value) => {
+        try {
+          await AsyncStorage.setItem('userID', value)
+        } catch (e) {
+          // saving error
+          console.log("Storing session fail");
+          console.log(e);
+        }
+      }
    
     return(
         <View style={styles.root}>
