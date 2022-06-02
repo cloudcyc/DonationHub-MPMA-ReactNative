@@ -43,20 +43,20 @@ function AdminEditProfileScreen ({navigation}) {
                 <Image
                     source={{
                     uri:
-                        'https://cdn-icons-png.flaticon.com/512/1828/1828439.png',
-                    }}
+                    'https://cdn-icons.flaticon.com/png/512/591/premium/591638.png?token=exp=1654161253~hmac=492a2b141cafe63e458129caf10a4a0e',
+                }}
                     style={styles.imageStyle}
                 />
                 <TextInput
                     style={styles.textInputStyle}
-                    placeholder="DoB"
+                    placeholder="DD-MM-YYYY"
                     underlineColorAndroid="transparent"
                     selectTextOnFocus={false}
+                    keyboardType="number-pad"
                     value={userDoB} onChangeText = {(val) => setuserDoB(val)}
                 />
                 
             </View>
-            <Text style={styles.title2}>Format: Day-Month-Year</Text>
 
             <View style={styles.sectionStyle}>
                 <Image
@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
     },
 
     textInputStyle: {
-        color: 'green',
         flex: 1
     },
 

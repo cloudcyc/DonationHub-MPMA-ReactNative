@@ -157,7 +157,24 @@ function AddNewAdmin ({navigation}) {
                 />
             </View>
 
-            <View>
+            <View style={styles.sectionStyle}>
+                <Image
+                    source={{
+                    uri:
+                        'https://cdn-icons.flaticon.com/png/512/591/premium/591638.png?token=exp=1654161253~hmac=492a2b141cafe63e458129caf10a4a0e',
+                    }}
+                    style={styles.imageStyle}
+                />
+                <TextInput
+                    style={styles.textInputStyle}
+                    placeholder="DD-MM-YYYY"
+                    underlineColorAndroid="transparent"
+                    keyboardType="number-pad"
+                    selectTextOnFocus={false}
+                />
+            </View>
+
+            <View style={styles.sectionStyle2}>
                 <Picker
                     selectedValue={userRole}
                     onValueChange={(value, index) => setuserRole(value)}
@@ -201,7 +218,7 @@ function AddNewAdmin ({navigation}) {
                     style={styles.loginScreenButton}
                     onPress={() => addNewAdmin()}
                     underlayColor='#fff'>
-                    <Text style={styles.loginText}>Update Profile</Text>
+                    <Text style={styles.loginText}>Submit</Text>
             </TouchableOpacity>
 
         </View>
@@ -228,6 +245,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderWidth: 1,
         height: 50,
+        borderRadius: 5,
+        marginTop: 10,
+        marginBottom:10,
+    },
+
+    sectionStyle2: {
+        backgroundColor: '#fff',
+        borderWidth: 1,
         borderRadius: 5,
         marginTop: 10,
         marginBottom:10,
@@ -309,7 +334,6 @@ const styles = StyleSheet.create({
     },
 
     textInputStyle: {
-        color: 'green',
         flex: 1
     },
 

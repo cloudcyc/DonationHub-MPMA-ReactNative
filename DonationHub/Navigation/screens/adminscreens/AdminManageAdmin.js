@@ -30,7 +30,8 @@ function AdminManageAdminScreen ({navigation}) {
   }, [isFocused]);
 
     return(
-        <View>
+        <View style={styles.root}>
+        
         <FlatList 
                         data={adminList}
                         keyExtractor= {(key) => {

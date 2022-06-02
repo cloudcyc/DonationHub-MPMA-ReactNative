@@ -50,7 +50,7 @@ function AdminManageAdminProfile ({navigation}) {
                 <Image
                     source={{
                     uri:
-                        'https://cdn-icons-png.flaticon.com/512/546/546394.png',
+                        'https://cdn-icons-png.flaticon.com/512/633/633781.png',
                     }}
                     style={styles.imageStyle}
                 />
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     },
 
     textInputStyle: {
-        color: 'green',
         flex: 1
     },
 
