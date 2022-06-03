@@ -12,14 +12,14 @@ function AddNewAdmin ({navigation}) {
     const [userID,setuserID] = useState('');
     const [userFullname,setuserFullname] = useState('');
     const [userEmail,setuserEmail] = useState('');
-    const [userDoB,setuserDoB] = useState('12-05-2000"');
+    const [userDoB,setuserDoB] = useState('Select DOB');
     const [userPassword,setuserPassword] = useState('');
     const [userConfirmPassword,setuserConfirmPassword] = useState('');
     const [userRole,setuserRole] = useState(null);
     const [currentTime,setcurrentTime] = useState('');
     const [userExist, setuserExist] = useState();
     const [date, setDate] = useState(new Date())
-    const [text, setText] = useState('Select DOB');
+    // const [text, setText] = useState();
     const [show, setShow] = useState(false);
     const [mode, setMode] = useState('date');
 
@@ -27,12 +27,12 @@ function AddNewAdmin ({navigation}) {
     const onChange = ( event, selectedDate) => {
         const currentDate = selectedDate || date;
         setDate(currentDate);
-
         let tempDate = new Date(currentDate);
         let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-        setText(fDate);
+        // setText(fDate);
+        setuserDoB(fDate);
         setShow(false);
-        console.log(fDate);
+        // console.log("hi "+userDoB);
     }
 
     const showMode = (cureentMode) => {
@@ -41,14 +41,15 @@ function AddNewAdmin ({navigation}) {
     }
 
     const getcurrentTime = () => {
-        // var date = new Date().getDate(); //Current Date
-        // var month = new Date().getMonth() + 1; //Current Month
-        // var year = new Date().getFullYear(); //Current Year
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
         var hours = new Date().getHours(); //Current Hours
         var min = new Date().getMinutes(); //Current Minutes
         var sec = new Date().getSeconds(); //Current Seconds
         setcurrentTime(
-          ' ' + hours + ':' + min + ':' + sec
+          date + '/' + month + '/' + year 
+          + ' ' + hours + ':' + min + ':' + sec
         );
     }
 
@@ -108,7 +109,7 @@ function AddNewAdmin ({navigation}) {
                             if (res.status == 200) {
                                     alert("Added successfully.")
                                     console.log("Item created successfully");
-                                    navigation.navigate('Admin')
+                                    navigation.navigate('AdminManageAdminScreen')
                                 } else {
                                     alert("Submission failed Error:" + res.status)
                                     console.log("Some error occured: ");
@@ -188,7 +189,7 @@ function AddNewAdmin ({navigation}) {
                 />
                 <TextInput
                     style={styles.textInputStyle}
-                    placeholder={text}
+                    placeholder={userDoB}
                     underlineColorAndroid="transparent"
                     placeholderTextColor="black" 
                     selectTextOnFocus={false}

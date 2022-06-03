@@ -27,7 +27,7 @@ function AdminManageAdminScreen ({navigation}) {
 
   useEffect(() => {
     getAdminsFunction();
-  }, [isFocused]);
+  }, [navigation, isFocused]);
 
     return(
         <View style={styles.root}>

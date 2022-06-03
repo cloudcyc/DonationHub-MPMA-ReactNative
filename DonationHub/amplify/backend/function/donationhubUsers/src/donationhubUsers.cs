@@ -109,6 +109,30 @@ namespace donationhubUsers
                             }
                         }
                     }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("UpdateUser"))
+                    {
+                        if (user == null)
+                        {
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (user != null)
+                        {
+                            if (await userProvider.AddNewUser(user))
+                            {
+                                return new APIGatewayProxyResponse 
+                                { 
+                                    StatusCode = 200
+                                };
+                            }
+                            else
+                            {
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 400
+                                };
+                            }
+                        }
+                    }
                     break;
                 case "PUT":
                     context.Logger.LogLine($"Put Request: {request.Path}\n");

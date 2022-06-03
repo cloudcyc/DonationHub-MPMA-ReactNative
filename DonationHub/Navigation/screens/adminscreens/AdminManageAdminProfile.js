@@ -2,10 +2,25 @@ import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useRoute } from "@react-navigation/native";
+import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 Ionicons.loadFont();
 
 
 function AdminManageAdminProfile ({navigation}) {
+    const route = useRoute();
+
+    const [currentUserID, setcurrentUserID] = useState('');
+    const [userID,setuserID] = useState(route.params.userID);
+    const [userFullname,setuserFullname] = useState(route.params.userFullname);
+    const [userEmail,setuserEmail] = useState(route.params.userEmail);
+    const [userDoB,setuserDoB] = useState(route.params.userDoB);
+    const [userPassword,setuserPassword] = useState(route.params.userPassword);
+    const [userConfirmPassword,setuserConfirmPassword] = useState('');
+    const [userRole,setuserRole] = useState(route.params.userRole);
+    const [createdTime,setcreatedTime] = useState(route.params.createdTime);
+
     const [date, setDate] = useState(new Date())
     const [text, setText] = useState('Select DOB');
     const [show, setShow] = useState(false);
@@ -18,7 +33,8 @@ function AdminManageAdminProfile ({navigation}) {
 
         let tempDate = new Date(currentDate);
         let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-        setText(fDate);
+        // setText(fDate);
+        setuserDoB(fDate);
         setShow(false);
 
         console.log(fDate);
@@ -27,6 +43,49 @@ function AdminManageAdminProfile ({navigation}) {
     const showMode = (cureentMode) => {
         setShow(true);
         setMode(cureentMode);
+    }
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+            setcurrentUserID(value);
+            
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
+
+    useEffect(() => {
+        retrieveUserID();
+      }, []);
+
+    const updateUserFunction = async () => {
+        let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+            method: "POST",
+            body: JSON.stringify({
+                userID: userID,
+                userEmail: userEmail,
+                userFullname: userFullname,
+                userPassword: userPassword,
+                userDoB: userDoB,
+                userRole: userRole,
+                createdTime: createdTime
+            }),
+        }).then((res) => {
+            if (res.status == 200) {
+                    alert("User update successfully.")
+                    navigation.navigate('AdminManageAdminScreen',{userID: currentUserID})
+                } else {
+                    alert("User update failed Error:" + res.status)
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                }
+        });
     }
 
     return(
@@ -47,8 +106,9 @@ function AdminManageAdminProfile ({navigation}) {
                     style={styles.textInputStyle}
                     placeholder="Enter Name Here"
                     underlineColorAndroid="transparent"
-                    editable={false}
+                    editable={true}
                     selectTextOnFocus={false}
+                    value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
             </View>
 
@@ -67,6 +127,7 @@ function AdminManageAdminProfile ({navigation}) {
                     keyboardType="email-address"
                     editable={false}
                     selectTextOnFocus={false}
+                    value={userEmail} onChangeText = {(val) => setuserEmail(val)}
                 />
             </View>
 
@@ -80,11 +141,13 @@ function AdminManageAdminProfile ({navigation}) {
                 />
                 <TextInput
                     style={styles.textInputStyle}
-                    placeholder={text}
+                    placeholder={userDoB}
                     underlineColorAndroid="transparent"
                     placeholderTextColor="black" 
                     selectTextOnFocus={false}
                     editable={false}
+                    value={userDoB} 
+                    // onChangeText = {(val) => setuserDoB(val)}
                 />
             </TouchableOpacity>
 
@@ -98,48 +161,25 @@ function AdminManageAdminProfile ({navigation}) {
                     onChange = {onChange}
                 />)}
 
-            <View style={styles.sectionStyle}>
-                <Image
-                    source={{
-                    uri:
-                        'https://cdn-icons-png.flaticon.com/512/633/633781.png',
-                    }}
-                    style={styles.imageStyle}
-                />
-                <TextInput
-                    style={styles.textInputStyle}
-                    placeholder="Enter Position Here"
-                    underlineColorAndroid="transparent"
-                    editable={false}
-                    selectTextOnFocus={false}
-                />
-            </View>
+            <View style={styles.sectionStyle2}>
+                <Picker
+                    selectedValue={userRole}
+                    onValueChange={(value, index) => setuserRole(value)}
+                    mode="dropdown" // Android only
+                    style={styles.picker}>
+                    
 
-            <View style={styles.sectionStyle}>
-            <Ionicons name='lock-closed-outline' size={30} style={{paddingLeft:5, paddingRight:7}}/>
+                    <Picker.Item label="Select a role" value= {null} />
+                    <Picker.Item label="Admin" value="Admin" />
+                    {/* <Picker.Item label="Member" value="Member" /> */}
 
-                <TextInput
-                    style={styles.textInputStyle}
-                    placeholder="Enter Password Here"
-                    underlineColorAndroid="transparent"
-                    secureTextEntry={true}
-                />
-            </View>
+                </Picker>
 
-            <View style={styles.sectionStyle}>
-            <Ionicons name='lock-closed-outline' size={30} style={{paddingLeft:5, paddingRight:7}} />
-
-                <TextInput
-                    style={styles.textInputStyle}
-                    placeholder="Enter Password Here Again"
-                    underlineColorAndroid="transparent"
-                    secureTextEntry={true}
-                />
             </View>
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('AdminManageAdminScreen')}
+                    onPress={() => updateUserFunction()}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Update Profile</Text>
             </TouchableOpacity>
