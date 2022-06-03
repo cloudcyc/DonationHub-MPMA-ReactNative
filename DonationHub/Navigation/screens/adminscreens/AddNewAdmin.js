@@ -31,7 +31,7 @@ function AddNewAdmin ({navigation}) {
         let tempDate = new Date(currentDate);
         let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
         setText(fDate);
-
+        setShow(false);
         console.log(fDate);
     }
 
@@ -41,15 +41,14 @@ function AddNewAdmin ({navigation}) {
     }
 
     const getcurrentTime = () => {
-        var date = new Date().getDate(); //Current Date
-        var month = new Date().getMonth() + 1; //Current Month
-        var year = new Date().getFullYear(); //Current Year
+        // var date = new Date().getDate(); //Current Date
+        // var month = new Date().getMonth() + 1; //Current Month
+        // var year = new Date().getFullYear(); //Current Year
         var hours = new Date().getHours(); //Current Hours
         var min = new Date().getMinutes(); //Current Minutes
         var sec = new Date().getSeconds(); //Current Seconds
         setcurrentTime(
-          date + '/' + month + '/' + year 
-          + ' ' + hours + ':' + min + ':' + sec
+          ' ' + hours + ':' + min + ':' + sec
         );
     }
 
