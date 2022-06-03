@@ -109,6 +109,9 @@ function AdminEditProfileScreen ({navigation}) {
                     display = 'default'
                     onChange = {onChange}
                     onTouchCancel = {setShow(false)}
+                    onCancel={() => {
+                        setShow(false)
+                      }}
                 />)}
             
             <View style={styles.sectionStyle}>
