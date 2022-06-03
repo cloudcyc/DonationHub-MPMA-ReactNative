@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInp
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import uuid from 'react-native-uuid';
 import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 Ionicons.loadFont();
 
 
@@ -17,6 +18,27 @@ function AddNewAdmin ({navigation}) {
     const [userRole,setuserRole] = useState(null);
     const [currentTime,setcurrentTime] = useState('');
     const [userExist, setuserExist] = useState();
+    const [date, setDate] = useState(new Date())
+    const [text, setText] = useState('Select DOB');
+    const [show, setShow] = useState(false);
+    const [mode, setMode] = useState('date');
+
+
+    const onChange = ( event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+
+        let tempDate = new Date(currentDate);
+        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+        setText(fDate);
+
+        console.log(fDate);
+    }
+
+    const showMode = (cureentMode) => {
+        setShow(true);
+        setMode(cureentMode);
+    }
 
     const getcurrentTime = () => {
         var date = new Date().getDate(); //Current Date
@@ -157,7 +179,7 @@ function AddNewAdmin ({navigation}) {
                 />
             </View>
 
-            <View style={styles.sectionStyle}>
+            <TouchableOpacity style={styles.sectionStyle} onPress={() => showMode('date') }>
                 <Image
                     source={{
                     uri:
@@ -167,12 +189,23 @@ function AddNewAdmin ({navigation}) {
                 />
                 <TextInput
                     style={styles.textInputStyle}
-                    placeholder="DD-MM-YYYY"
+                    placeholder={text}
                     underlineColorAndroid="transparent"
-                    keyboardType="number-pad"
+                    placeholderTextColor="black" 
                     selectTextOnFocus={false}
+                    editable={false}
                 />
-            </View>
+            </TouchableOpacity>
+
+            {show && (
+                    <DateTimePicker
+                    testID = 'dateTimePicker'
+                    value = {date}
+                    mode = {mode}
+                    is24Hour = {true}
+                    display = 'default'
+                    onChange = {onChange}
+                />)}
 
             <View style={styles.sectionStyle2}>
                 <Picker

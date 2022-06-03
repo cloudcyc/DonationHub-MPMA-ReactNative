@@ -1,10 +1,33 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 Ionicons.loadFont();
 
 
 function AdminManageAdminProfile ({navigation}) {
+    const [date, setDate] = useState(new Date())
+    const [text, setText] = useState('Select DOB');
+    const [show, setShow] = useState(false);
+    const [mode, setMode] = useState('date');
+
+
+    const onChange = ( event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+
+        let tempDate = new Date(currentDate);
+        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+        setText(fDate);
+
+        console.log(fDate);
+    }
+
+    const showMode = (cureentMode) => {
+        setShow(true);
+        setMode(cureentMode);
+    }
+
     return(
         <View style={styles.root}>
 
@@ -45,6 +68,34 @@ function AdminManageAdminProfile ({navigation}) {
                     selectTextOnFocus={false}
                 />
             </View>
+
+            <TouchableOpacity style={styles.sectionStyle} onPress={() => showMode('date') }>
+                <Image
+                    source={{
+                    uri:
+                        'https://cdn-icons.flaticon.com/png/512/591/premium/591638.png?token=exp=1654161253~hmac=492a2b141cafe63e458129caf10a4a0e',
+                    }}
+                    style={styles.imageStyle}
+                />
+                <TextInput
+                    style={styles.textInputStyle}
+                    placeholder={text}
+                    underlineColorAndroid="transparent"
+                    placeholderTextColor="black" 
+                    selectTextOnFocus={false}
+                    editable={false}
+                />
+            </TouchableOpacity>
+
+            {show && (
+                    <DateTimePicker
+                    testID = 'dateTimePicker'
+                    value = {date}
+                    mode = {mode}
+                    is24Hour = {true}
+                    display = 'default'
+                    onChange = {onChange}
+                />)}
 
             <View style={styles.sectionStyle}>
                 <Image

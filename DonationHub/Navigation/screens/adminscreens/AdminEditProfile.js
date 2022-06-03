@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRoute } from "@react-navigation/native";
+import DateTimePicker from '@react-native-community/datetimepicker';
 Ionicons.loadFont();
 
 
@@ -35,6 +36,7 @@ function AdminEditProfileScreen ({navigation}) {
                     placeholder="Enter Your Name Here"
                     underlineColorAndroid="transparent"
                     selectTextOnFocus={false}
+                    editable={false}
                     value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
             </View>
@@ -53,6 +55,7 @@ function AdminEditProfileScreen ({navigation}) {
                     underlineColorAndroid="transparent"
                     selectTextOnFocus={false}
                     keyboardType="number-pad"
+                    editable={false}
                     value={userDoB} onChangeText = {(val) => setuserDoB(val)}
                 />
                 
