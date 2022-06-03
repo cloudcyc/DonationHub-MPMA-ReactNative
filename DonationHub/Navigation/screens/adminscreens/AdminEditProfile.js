@@ -108,6 +108,7 @@ function AdminEditProfileScreen ({navigation}) {
                     is24Hour = {true}
                     display = 'default'
                     onChange = {onChange}
+                    onTouchCancel = {setShow(false)}
                 />)}
             
             <View style={styles.sectionStyle}>
