@@ -15,7 +15,27 @@ function AdminEditProfileScreen ({navigation}) {
     const [userDoB,setuserDoB] = useState(route.params.userDoB);
     const [userPassword,setuserPassword] = useState(route.params.userPassword);
     // const [userRole,setuserRole] = useState(route.params.centreCoordinate[0]);
-    
+    const [date, setDate] = useState(new Date())
+    const [text, setText] = useState('Select DOB');
+    const [show, setShow] = useState(false);
+    const [mode, setMode] = useState('date');
+
+
+    const onChange = ( event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+
+        let tempDate = new Date(currentDate);
+        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+        setuserDoB(fDate);
+        setShow(false);
+        console.log(fDate);
+    }
+
+    const showMode = (cureentMode) => {
+        setShow(true);
+        setMode(cureentMode);
+    }
 
     return(
         <View style={styles.root}>
@@ -45,26 +65,6 @@ function AdminEditProfileScreen ({navigation}) {
                 <Image
                     source={{
                     uri:
-                    'https://cdn-icons.flaticon.com/png/512/591/premium/591638.png?token=exp=1654161253~hmac=492a2b141cafe63e458129caf10a4a0e',
-                }}
-                    style={styles.imageStyle}
-                />
-                <TextInput
-                    style={styles.textInputStyle}
-                    placeholder="DD-MM-YYYY"
-                    underlineColorAndroid="transparent"
-                    selectTextOnFocus={false}
-                    keyboardType="number-pad"
-                    editable={false}
-                    value={userDoB} onChangeText = {(val) => setuserDoB(val)}
-                />
-                
-            </View>
-
-            <View style={styles.sectionStyle}>
-                <Image
-                    source={{
-                    uri:
                         'https://cdn-icons-png.flaticon.com/512/546/546394.png',
                     }}
                     style={styles.imageStyle}
@@ -80,7 +80,35 @@ function AdminEditProfileScreen ({navigation}) {
                 />
             </View>
             
-            
+            <TouchableOpacity style={styles.sectionStyle} onPress={() => showMode('date') }>
+                <Image
+                    source={{
+                    uri:
+                    'https://cdn-icons.flaticon.com/png/512/591/premium/591638.png?token=exp=1654161253~hmac=492a2b141cafe63e458129caf10a4a0e',
+                }}
+                    style={styles.imageStyle}
+                />
+                <TextInput
+                    style={styles.textInputStyle}
+                    placeholder="DD-MM-YYYY"
+                    underlineColorAndroid="transparent"
+                    selectTextOnFocus={false}
+                    keyboardType="number-pad"
+                    editable={false}
+                    value={userDoB} onChangeText = {(val) => setuserDoB(val)}
+                />
+                
+            </TouchableOpacity>
+
+            {show && (
+                    <DateTimePicker
+                    testID = 'dateTimePicker'
+                    value = {date}
+                    mode = {mode}
+                    is24Hour = {true}
+                    display = 'default'
+                    onChange = {onChange}
+                />)}
             
             <View style={styles.sectionStyle}>
             

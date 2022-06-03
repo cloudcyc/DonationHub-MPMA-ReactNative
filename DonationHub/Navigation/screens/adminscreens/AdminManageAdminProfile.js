@@ -19,6 +19,7 @@ function AdminManageAdminProfile ({navigation}) {
         let tempDate = new Date(currentDate);
         let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
         setText(fDate);
+        setShow(false);
 
         console.log(fDate);
     }
