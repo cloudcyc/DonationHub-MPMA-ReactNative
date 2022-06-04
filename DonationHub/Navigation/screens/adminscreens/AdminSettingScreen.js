@@ -42,7 +42,29 @@ function AdminSettingScreen ({navigation}) {
       // error reading value
       console.log(e);
     }
-  }
+  };
+
+  const clearAsyncStorage  = () =>{
+    try {
+      AsyncStorage.removeItem('userID');
+      return true;
+    }
+    catch(exception) {
+        return false;
+    }
+  };
+
+  const logoutFunction = () =>{
+    console.log(clearAsyncStorage());
+    if (clearAsyncStorage() == true){
+
+      alert("Logout Success.");
+      navigation.navigate('HomeTabs');
+    }
+    else{
+      alert("Logout fail");
+    }
+  };
 
 
   useEffect(() => {
@@ -103,7 +125,7 @@ function AdminSettingScreen ({navigation}) {
 
           <View style={styles.bottomView}>
 
-              <TouchableOpacity style={styles.Signoutbutton} onPress={() => navigation.navigate('HomeTabs')}>
+              <TouchableOpacity style={styles.Signoutbutton} onPress={() => logoutFunction()}>
                   <View style={styles.row}>
                       <Ionicons name='power-outline' size={35} color='#FFF' />
                       <Text style={styles.SignoutText}>Sign Out</Text>
