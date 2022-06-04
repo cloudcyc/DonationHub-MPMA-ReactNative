@@ -143,8 +143,22 @@ namespace donationhubUsers
                     response.StatusCode = (int)HttpStatusCode.OK;
                     break;
                 case "DELETE":
-                    context.Logger.LogLine($"Delete Request: {request.Path}\n");
-                    response.StatusCode = (int)HttpStatusCode.OK;
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserEmail") && request.QueryStringParameters.ContainsKey("inputUserID") )
+                    {
+                        if (await userProvider.DeleteUserAsync(request.QueryStringParameters["inputUserEmail"],request.QueryStringParameters["inputUserID"]))
+                        {
+                            return new APIGatewayProxyResponse 
+                            { 
+                                StatusCode = 200
+                            };
+                        }
+                        else{
+                            return new APIGatewayProxyResponse
+                            {
+                                StatusCode = 400
+                            };
+                        }
+                    }
                     break;
                 default:
                     context.Logger.LogLine($"Unrecognized verb {request.HttpMethod}\n");

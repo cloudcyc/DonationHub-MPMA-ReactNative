@@ -192,5 +192,22 @@ namespace donationhubUsers
             var response = await dynamoDB.PutItemAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
+
+        
+        public async Task<bool> DeleteUserAsync(string inputUserEmail, string inputUserID){
+            var request = new DeleteItemRequest
+                {
+                    TableName = "users-dev",
+                    Key = new Dictionary<string,AttributeValue>() {
+                         { "userEmail", new AttributeValue { S = inputUserEmail } },
+                         { "userID", new AttributeValue { S = inputUserID } }
+                         
+                     },
+                };
+
+            var response = await dynamoDB.DeleteItemAsync(request);
+            
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
     }
 }

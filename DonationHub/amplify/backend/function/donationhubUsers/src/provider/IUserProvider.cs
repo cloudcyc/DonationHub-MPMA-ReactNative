@@ -10,5 +10,6 @@ namespace donationhubUsers
        Task<UserModel[]> GetUserByEmailAsync(string inputUserEmail);
        Task<UserModel[]> GetUserByIDAsync(string inputUserID);
        Task<bool> AddNewUser (UserModel user);
+       Task<bool> DeleteUserAsync(string inputUserEmail, string inputUserID);
     }
 }

@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { Image, StyleSheet, Text, View,TouchableHighlight, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList} from 'react-native';
+import { Image, StyleSheet, Text, View,TouchableHighlight, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList, Alert} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
@@ -22,6 +22,48 @@ function AdminManageAdminScreen ({navigation}) {
     });
 
   };
+
+  const deleteUserFunction = async(inputUserEmail, inputUserID) => {
+    var deleteUserAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ inputUserEmail + '&inputUserID='+ inputUserID;
+    console.log(deleteUserAPI);
+    let res = await fetch(deleteUserAPI, {
+      method: "DELETE"
+    }).then((res) => {
+      if (res.status == 200) {
+              alert("User deleted successfully.")
+              getAdminsFunction();
+            } else {
+              alert("User delete failed. Error:" + res.status)
+              console.log("Some error occured: ");
+              console.log(res.status)
+              console.log(res)
+            }
+    });
+  };
+    
+
+  const showAlertBox = (inputUserEmail, inputUserID) => {
+    return Alert.alert(
+      "Are your sure?",
+      "Are you sure you want to delete this user: " + inputUserEmail +" ?" ,
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            deleteUserFunction(inputUserEmail,inputUserID);
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
+
+
 
   
 
@@ -55,7 +97,7 @@ function AdminManageAdminScreen ({navigation}) {
                                         <Ionicons name='create-outline' size={25} />
                                       </TouchableOpacity>
 
-                                      <TouchableOpacity style={[styles.button, styles.profile]}>
+                                      <TouchableOpacity style={[styles.button, styles.profile]} onPress={() => showAlertBox(item.userEmail, item.userID)}>
                                           <Ionicons name='trash-outline' size={25} style={{color:'white'}} />
                                       </TouchableOpacity>
                                     </View>
@@ -65,27 +107,6 @@ function AdminManageAdminScreen ({navigation}) {
                         }}
             >
             </FlatList> 
-            {/* <ScrollView style={styles.root}>
-                <View style={styles.box}>
-                    <Image style={styles.image} source={{uri: "https://bootdey.com/img/Content/avatar/avatar1.png"}} />
-                    <View style={styles.boxContent}>
-                        <Text style={styles.title}>Holland Team</Text>
-                        <Text style={styles.description}>CEO</Text>
-                        <View style={styles.buttons}>
-                            
-                            <TouchableOpacity style={[styles.button, styles.view]} onPress={() => navigation.navigate('AdminManageAdminProfile')}>
-                                <Ionicons name='create-outline' size={25} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={[styles.button, styles.profile]}>
-                                <Ionicons name='trash-outline' size={25} style={{color:'white'}} />
-                            </TouchableOpacity>
-
-                        </View>
-                    </View>
-                </View>
-                
-            </ScrollView> */}
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('AddNewAdmin')}
