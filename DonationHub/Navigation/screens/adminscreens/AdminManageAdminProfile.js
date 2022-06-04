@@ -22,22 +22,27 @@ function AdminManageAdminProfile ({navigation}) {
     const [createdTime,setcreatedTime] = useState(route.params.createdTime);
 
     const [date, setDate] = useState(new Date())
-    const [text, setText] = useState('Select DOB');
+    // const [text, setText] = useState('Select DOB');
     const [show, setShow] = useState(false);
     const [mode, setMode] = useState('date');
 
 
     const onChange = ( event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
-
-        let tempDate = new Date(currentDate);
-        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-        // setText(fDate);
-        setuserDoB(fDate);
-        setShow(false);
-
-        console.log(fDate);
+        
+        if (event.type == 'dismissed'){
+            setShow(false);
+            
+        }else if (event.type == 'set'){
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
+            
+            let tempDate = new Date(currentDate);
+            let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+            setuserDoB(fDate);
+            setShow(false);
+        }
+        
+        
     }
 
     const showMode = (cureentMode) => {
@@ -64,28 +69,34 @@ function AdminManageAdminProfile ({navigation}) {
       }, []);
 
     const updateUserFunction = async () => {
-        let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
-            method: "POST",
-            body: JSON.stringify({
-                userID: userID,
-                userEmail: userEmail,
-                userFullname: userFullname,
-                userPassword: userPassword,
-                userDoB: userDoB,
-                userRole: userRole,
-                createdTime: createdTime
-            }),
-        }).then((res) => {
-            if (res.status == 200) {
-                    alert("User update successfully.")
-                    navigation.navigate('AdminManageAdminScreen',{userID: currentUserID})
-                } else {
-                    alert("User update failed Error:" + res.status)
-                    console.log("Some error occured: ");
-                    console.log(res.status)
-                    console.log(res)
-                }
-        });
+        if (userRole == null){
+            alert("User must have a role.")
+        }
+        else
+        {
+            let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                method: "POST",
+                body: JSON.stringify({
+                    userID: userID,
+                    userEmail: userEmail,
+                    userFullname: userFullname,
+                    userPassword: userPassword,
+                    userDoB: userDoB,
+                    userRole: userRole,
+                    createdTime: createdTime
+                }),
+            }).then((res) => {
+                if (res.status == 200) {
+                        alert("User update successfully.")
+                        navigation.navigate('AdminManageAdminScreen',{userID: currentUserID})
+                    } else {
+                        alert("User update failed Error:" + res.status)
+                        console.log("Some error occured: ");
+                        console.log(res.status)
+                        console.log(res)
+                    }
+            });
+        }
     }
 
     return(

@@ -25,14 +25,21 @@ function AddNewAdmin ({navigation}) {
 
 
     const onChange = ( event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
-        let tempDate = new Date(currentDate);
-        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-        // setText(fDate);
-        setuserDoB(fDate);
-        setShow(false);
-        // console.log("hi "+userDoB);
+        
+        if (event.type == 'dismissed'){
+            setShow(false);
+            
+        }else if (event.type == 'set'){
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
+            
+            let tempDate = new Date(currentDate);
+            let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+            setuserDoB(fDate);
+            setShow(false);
+        }
+        
+        
     }
 
     const showMode = (cureentMode) => {

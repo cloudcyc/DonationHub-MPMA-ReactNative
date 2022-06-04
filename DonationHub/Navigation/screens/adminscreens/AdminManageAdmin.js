@@ -8,7 +8,7 @@ Ionicons.loadFont();
 function AdminManageAdminScreen ({navigation}) {
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const route = useRoute();
-  console.log("this "+route.params.userID);
+  
   const [adminList, setadminList] = useState([]);
   
 

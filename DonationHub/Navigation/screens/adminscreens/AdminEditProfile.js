@@ -9,12 +9,17 @@ Ionicons.loadFont();
 function AdminEditProfileScreen ({navigation}) {
     const route = useRoute();
     
+    // const [currentUserID, setcurrentUserID] = useState('');
     const [userID,setuserID] = useState(route.params.userID);
     const [userFullname,setuserFullname] = useState(route.params.userFullname);
     const [userEmail,setuserEmail] = useState(route.params.userEmail);
     const [userDoB,setuserDoB] = useState(route.params.userDoB);
-    const [userPassword,setuserPassword] = useState(route.params.userPassword);
-    // const [userRole,setuserRole] = useState(route.params.centreCoordinate[0]);
+    const [userCurrentPassword,setuserPassword] = useState(route.params.userPassword);
+    const [userRole,setuserRole] = useState(route.params.userRole);
+    const [createdTime,setcreatedTime] = useState(route.params.createdTime);
+
+    const [userOldPassword,setuserOldPassword] = useState('');
+    const [userNewPassword,setuserNewPassword] = useState('');
     const [date, setDate] = useState(new Date())
     const [text, setText] = useState('Select DOB');
     const [show, setShow] = useState(false);
@@ -22,19 +27,98 @@ function AdminEditProfileScreen ({navigation}) {
 
 
     const onChange = ( event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
-
-        let tempDate = new Date(currentDate);
-        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-        setuserDoB(fDate);
-        setShow(false);
-        console.log(fDate);
+        
+        if (event.type == 'dismissed'){
+            setShow(false);
+            
+        }else if (event.type == 'set'){
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
+            
+            let tempDate = new Date(currentDate);
+            let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+            setuserDoB(fDate);
+            setShow(false);
+        }
+        
+        
     }
 
     const showMode = (cureentMode) => {
         setShow(true);
         setMode(cureentMode);
+    }
+
+    const updateProfileFunction = async () => {
+        // console.log(userID);
+        // console.log(userFullname);
+        // console.log(userEmail);
+        // console.log(userCurrentPassword);
+        // console.log(userRole);
+        // console.log(createdTime);
+        // console.log(userDoB);
+
+        if (userOldPassword == '' && userNewPassword == ''){
+            let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                method: "POST",
+                body: JSON.stringify({
+                    userID: userID,
+                    userEmail: userEmail,
+                    userFullname: userFullname,
+                    userPassword: userCurrentPassword,
+                    userDoB: userDoB,
+                    userRole: userRole,
+                    createdTime: createdTime
+                }),
+            }).then((res) => {
+                if (res.status == 200) {
+                        alert("Profile update successfully without changing password.")
+                        navigation.navigate('Admin')
+                    } else {
+                        alert("User update failed Error:" + res.status)
+                        console.log("Some error occured: ");
+                        console.log(res.status)
+                        console.log(res)
+                    }
+            });
+        }
+        else if (userOldPassword != '' && userCurrentPassword == userOldPassword)
+        {
+            if (userNewPassword != ''){
+                let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        userID: userID,
+                        userEmail: userEmail,
+                        userFullname: userFullname,
+                        userPassword: userNewPassword,
+                        userDoB: userDoB,
+                        userRole: userRole,
+                        createdTime: createdTime
+                    }),
+                }).then((res) => {
+                    if (res.status == 200) {
+                            alert("Profile update successfully with new password.")
+                            navigation.navigate('Admin')
+                        } else {
+                            alert("User update failed Error:" + res.status)
+                            console.log("Some error occured: ");
+                            console.log(res.status)
+                            console.log(res)
+                        }
+                });
+            }
+            else
+            {
+                alert("Please enter new Password")
+            }
+            
+        }
+        else if (userOldPassword != '' && userCurrentPassword != userOldPassword)
+        {
+            alert("Current password does not match.")
+        }
+
     }
 
     return(
@@ -56,7 +140,7 @@ function AdminEditProfileScreen ({navigation}) {
                     placeholder="Enter Your Name Here"
                     underlineColorAndroid="transparent"
                     selectTextOnFocus={false}
-                    editable={false}
+                    editable={true}
                     value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
             </View>
@@ -108,10 +192,10 @@ function AdminEditProfileScreen ({navigation}) {
                     is24Hour = {true}
                     display = 'default'
                     onChange = {onChange}
-                    onTouchCancel = {setShow(false)}
-                    onCancel={() => {
-                        setShow(false)
-                      }}
+                    // onTouchCancel = {setShow(false)}
+                    // onCancel={() => {
+                    //     setShow(false)
+                    //   }}
                 />)}
             
             <View style={styles.sectionStyle}>
@@ -123,7 +207,8 @@ function AdminEditProfileScreen ({navigation}) {
                     placeholder="Enter Your Old Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
-
+                    value={userOldPassword}
+                    onChangeText = {(val) => setuserOldPassword(val)}
                 />
             </View>
 
@@ -135,13 +220,15 @@ function AdminEditProfileScreen ({navigation}) {
                     placeholder="Enter Your New Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
+                    value={userNewPassword}
+                    onChangeText = {(val) => setuserNewPassword(val)}
                 />
             </View>
             <Text style={styles.title2}>Note: Changing password required to enter old and new password.</Text>
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('Admin')}
+                    onPress={() => updateProfileFunction()}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Update Profile</Text>
             </TouchableOpacity>
