@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react';
 import { createStackNavigator } from "@react-navigation/stack";
 
 import LoginScreen from './screens/adminscreens/Loginscreen';
@@ -31,6 +31,7 @@ const RequestScreenName = 'Requests' ;
 const ProfileScreenName = 'Settings';
 
 function HomeTabs() {
+  const [userLogin, setuserLogin] = useState(true);
     return (
       <Tab.Navigator
       screenOptions={({route}) => ({
@@ -54,7 +55,14 @@ function HomeTabs() {
             >
 
         <Tab.Screen name={HomeScreenName} component={HomeScreen} options={{headerShown: false,}}/>
-        <Tab.Screen name={ProfileScreenName} component={ProfileScreen} options={{headerShown: false,}}/>
+        {/* {
+          userLogin == true ? 
+          <Tab.Screen name={RequestScreenName} component={RequestScreen} options={{headerShown: false,}}/>
+          : 
+          <Tab.Screen name={ProfileScreenName} component={ProfileScreen} options={{headerShown: false,}}/> 
+        } */}
+        <Tab.Screen name={ProfileScreenName} component={ProfileScreen} options={{headerShown: false,}}/> 
+        
         
       </Tab.Navigator>
     );
