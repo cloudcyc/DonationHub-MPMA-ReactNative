@@ -148,7 +148,7 @@ function AdminEditLocation ({navigation}) {
                         style={styles.textInputStyle}
                         placeholder="Enter The Centre Address"
                         underlineColorAndroid="transparent"
-                        value= {centreAddress}
+                        value= {centreAddress} onChangeText = {(val) => setcentreAddress(val)}
                     />
                 </View>
             </View>
@@ -171,6 +171,7 @@ function AdminEditLocation ({navigation}) {
                         underlineColorAndroid="transparent"
                         keyboardType="phone-pad"
                         value= {centreLatitude}
+                        onChangeText = {(val) => setcentreLatitude(val)}
                     />
                 </View>
                 <Text style={styles.title3}>Longitude:</Text>
@@ -189,6 +190,7 @@ function AdminEditLocation ({navigation}) {
                         underlineColorAndroid="transparent"
                         keyboardType="phone-pad"
                         value= {centreLongitude}
+                        onChangeText = {(val) => setcentreLongitude(val)}
                     />
                 </View>
             </View>
@@ -209,6 +211,7 @@ function AdminEditLocation ({navigation}) {
                         placeholder="Enter Centre Description"
                         underlineColorAndroid="transparent"
                         value= {centreDesc}
+                        onChangeText = {(val) => setcentreDesc(val)}
                     />
                 </View>
             </View>

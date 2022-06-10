@@ -114,12 +114,12 @@ function AdminSettingScreen ({navigation}) {
                   </View>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('RequestScreen')}>
+              {/* <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('RequestScreen')}>
                   <View style={styles.row}>
                       <Ionicons name='newspaper-outline' size={35} />
                       <Text style={styles.ButtonText}>View All Request</Text>
                   </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
           </ScrollView>
 

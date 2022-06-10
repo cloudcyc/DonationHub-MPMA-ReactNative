@@ -17,7 +17,6 @@ function LoginScreen ({navigation}) {
         // console.log(getUsersAPI);
         var getUsersAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ userEmail +'&inputUserPassword='+ userPassword;
         fetch(getUsersAPI).then((response) => response.json()).then((json) => {
-            console.log(json[0].userID);
             if (json.length > 0){
                 alert("Login Success");
                 if (storeData(json[0].userID)){

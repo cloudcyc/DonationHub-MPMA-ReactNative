@@ -140,7 +140,7 @@ function AdminEditProfileScreen ({navigation}) {
                     placeholder="Enter Your Name Here"
                     underlineColorAndroid="transparent"
                     selectTextOnFocus={false}
-                    editable={true}
+                    editable={false}
                     value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
             </View>
