@@ -31,7 +31,7 @@ function LoginScreen ({navigation}) {
                 
               }  
         }).catch((error) => {
-            console.log("HELLO");
+            console.log("Wrong API");
             console.error(error);
         });
   
