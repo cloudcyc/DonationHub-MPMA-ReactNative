@@ -143,7 +143,7 @@ function AddNewRequest ({navigation}) {
                         style={styles.textInputStyle}
                         placeholder="Enter Latitude. Eg: 3.0554"
                         underlineColorAndroid="transparent"
-                        keyboardType="phone-pad"
+                        keyboardType='numeric'
                         value={centreLatitude} onChangeText = {(val) => setcentreLatitude(val)}
                     />
                 </View>
@@ -161,7 +161,7 @@ function AddNewRequest ({navigation}) {
                         style={styles.textInputStyle}
                         placeholder="Enter Longitude. Eg: 101.7006"
                         underlineColorAndroid="transparent"
-                        keyboardType="phone-pad"
+                        keyboardType='numeric'
                         value={centreLongitude} onChangeText = {(val) => setcentreLongitude(val)}
                     />
                 </View>
